@@ -44,7 +44,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private GoogleApiClient googleApiClient;
 
-    private int radius = 300;
     private int numberAscending;
     private long time;
 
@@ -142,7 +141,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void loadCoordinates(int numberAscending) {
         List<LatLng> coordinates = Coordinates.getCoordinatesList();
         mMap.addMarker(new MarkerOptions().position(coordinates.get(numberAscending)).title("Coordinate " + numberAscending)).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.blue_pin));
-        mMap.addCircle(new CircleOptions().center(coordinates.get(numberAscending)).radius(radius));
+        mMap.addCircle(new CircleOptions().center(coordinates.get(numberAscending)).radius(QuestionLibrary.radius.get(numberAscending)));
 
     }
 
@@ -177,7 +176,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             double distanceInKM = setTVDistance(location);
 
-            if (distanceInKM < radius) {
+            if (distanceInKM < QuestionLibrary.radius.get(numberAscending)) {
 
                 dialogActive = true;
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -310,6 +309,5 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mButtonChoice2.setText(QuestionLibrary.choices2.get(mQuestionNumber));
             mButtonChoice3.setText(QuestionLibrary.choices3.get(mQuestionNumber));
             mAnswer = QuestionLibrary.correctAnswers.get(mQuestionNumber);
-
     }
 }

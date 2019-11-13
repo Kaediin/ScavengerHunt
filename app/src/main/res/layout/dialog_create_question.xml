@@ -19,6 +19,7 @@
         android:textSize="24sp" />
 
     <RelativeLayout
+        android:id="@+id/rel_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/new_question"
@@ -113,5 +114,31 @@
             android:text="@string/add_loc_dialog_button"
             android:textColor="@color/white" />
     </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rel_dialog">
+
+        <TextView
+            android:id="@+id/radius"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="radius"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:layout_centerHorizontal="true" />
+
+        <SeekBar
+            android:id="@+id/seekbar"
+            android:layout_below="@+id/radius"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:min="10"
+            android:max="50"/>
+    </RelativeLayout>
+
+
 
 </RelativeLayout>

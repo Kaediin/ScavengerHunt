@@ -10,4 +10,5 @@ class QuestionLibrary {
     static List<String> choices2 = new ArrayList<>();
     static List<String> choices3 = new ArrayList<>();
     static List<String> correctAnswers = new ArrayList<>();
+    static List<Integer> radius = new ArrayList<>();
 }

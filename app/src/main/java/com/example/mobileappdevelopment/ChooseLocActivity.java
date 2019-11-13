@@ -3,6 +3,10 @@ package com.example.mobileappdevelopment;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -29,7 +35,7 @@ import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCallback{
+public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCallback {
 
 
     private GoogleMap mMap;
@@ -54,8 +60,10 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
     private LatLng myPos;
 
     private View panel;
+    private View thumbView;
 
     private ProgressBar progressBar;
+    private SeekBar seekBar;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -83,6 +91,7 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
         progressBar = findViewById(R.id.loading_circle);
         panel = findViewById(R.id.loading_panel);
 
+        seekBar = popupDialogView.findViewById(R.id.seekbar);
         cancel = popupDialogView.findViewById(R.id.cancel_loc);
         add = popupDialogView.findViewById(R.id.add_new_loc);
         question = popupDialogView.findViewById(R.id.new_question);
@@ -91,6 +100,8 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
         answer3 = popupDialogView.findViewById(R.id.edit_field_3);
         radioGroup = popupDialogView.findViewById(R.id.radio_group);
         selectedLatLng = null;
+
+        thumbView = LayoutInflater.from(popupDialogView.getContext()).inflate(R.layout.seekbar_layout_thumb, null, false);
 
         selectLocationButton.setVisibility(View.GONE);
         start.setVisibility(View.GONE);
@@ -103,7 +114,7 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
                 progressBar.setVisibility(View.GONE);
                 selectLocationButton.setVisibility(View.VISIBLE);
             }
-        },2000);
+        }, 2000);
     }
 
     @Override
@@ -141,6 +152,22 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
             }
         });
 
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                thumbView.setVisibility(View.VISIBLE);
+                seekBar.setThumb(getThumb(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,6 +194,8 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
 
                     QuestionLibrary.correctAnswers.add(getCorrectAnswer(radioGroup.getCheckedRadioButtonId()));
 
+                    QuestionLibrary.radius.add(seekBar.getProgress());
+
                     question.setText("");
                     answer1.setText("");
                     answer2.setText("");
@@ -192,8 +221,8 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
         });
     }
 
-    private String getCorrectAnswer(int radioResult){
-        switch (radioResult){
+    private String getCorrectAnswer(int radioResult) {
+        switch (radioResult) {
             case 1:
                 return answer1.getText().toString();
             case 2:
@@ -202,6 +231,19 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
                 return answer3.getText().toString();
         }
         return null;
+    }
+
+    @SuppressLint("SetTextI18n")
+    public Drawable getThumb(int progress) {
+        ((TextView) thumbView.findViewById(R.id.tvProgress)).setText(progress + "");
+
+        thumbView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        Bitmap bitmap = Bitmap.createBitmap(thumbView.getMeasuredWidth(), thumbView.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        thumbView.layout(0, 0, thumbView.getMeasuredWidth(), thumbView.getMeasuredHeight());
+        thumbView.draw(canvas);
+
+        return new BitmapDrawable(getResources(), bitmap);
     }
 
 }

@@ -23,6 +23,7 @@
     <string name="hint_answer3">Answer 3</string>
     <string name="add_loc_dialog_button">Add</string>
     <string name="cancel_dialog_button">Cancel</string>
+    <string name="radius_text">Radius in  meters</string>
 
 <!--    dialog_quetion.xml-->
     <string name="placeholder_question">Loading…</string>
