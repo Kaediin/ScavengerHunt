@@ -3,9 +3,15 @@
     <string name="app_name">Scavenger Hunt</string>
     <string name="title_activity_maps">Map</string>
 
-<!--    activity_choose_location.xml, activity_main.xml-->
+<!--    activity_choose_location.xml-->
     <string name="select_location_button">Select</string>
     <string name="start_hunt_button">Start</string>
+    <string name="trespass_message">Please do not trespass while playing</string>
+
+<!--    activity_main.xml-->
+    <string name="info_title">Information:</string>
+    <string name="info_subject">Creating a question:</string>
+    <string name="info_text">Creating a question is very simple. \nYou fill in all the textfields and select which answer is the correct with the radiobuttons(the three vertical dots)</string>
 
 <!--    activity_maps.xml-->
     <string name="placeholder_metersFromLoc"> </string>

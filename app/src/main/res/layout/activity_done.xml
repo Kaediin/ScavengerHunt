@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/congratz_text"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="50sp" />
 
         <TextView
@@ -23,6 +23,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
+            android:layout_marginTop="5sp"
+            android:textColor="@color/white"
             android:layout_below="@+id/done_text"
             android:textSize="30sp"
             android:layout_centerInParent="true"/>
@@ -31,6 +33,7 @@
             android:layout_marginTop="50dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:text=""
             android:layout_below="@+id/done_text"
             android:textSize="25sp"

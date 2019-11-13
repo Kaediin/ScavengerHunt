@@ -5,10 +5,12 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -51,6 +53,10 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
 
     private LatLng myPos;
 
+    private View panel;
+
+    private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -74,6 +80,8 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
 
         selectLocationButton = findViewById(R.id.select_location_button);
         start = findViewById(R.id.start_hunt);
+        progressBar = findViewById(R.id.loading_circle);
+        panel = findViewById(R.id.loading_panel);
 
         cancel = popupDialogView.findViewById(R.id.cancel_loc);
         add = popupDialogView.findViewById(R.id.add_new_loc);
@@ -84,7 +92,18 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
         radioGroup = popupDialogView.findViewById(R.id.radio_group);
         selectedLatLng = null;
 
+        selectLocationButton.setVisibility(View.GONE);
         start.setVisibility(View.GONE);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                panel.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
+                selectLocationButton.setVisibility(View.VISIBLE);
+            }
+        },2000);
     }
 
     @Override
@@ -156,9 +175,10 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
 
 
                     start.setVisibility(View.VISIBLE);
+                    Toast.makeText(ChooseLocActivity.this, "Location added!", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 } else {
-                    Toast.makeText(ChooseLocActivity.this, "Please fill all the fields in", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChooseLocActivity.this, "Please fill in all the fields", Toast.LENGTH_SHORT).show();
                 }
             }
         });

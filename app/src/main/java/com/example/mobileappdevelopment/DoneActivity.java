@@ -30,7 +30,11 @@ public class DoneActivity extends AppCompatActivity {
         numberQuestions = findViewById(R.id.numberQuestions);
 
         timeView.setText("Hours: "+hours+"\nMinutes: "+minutes+"\nSeconds: "+seconds);
-        numberQuestions.setText("You finished "+totalQuestions+ " questions in");
+        if (totalQuestions == 1){
+            numberQuestions.setText("You finished "+totalQuestions+ " question in");
+        } else {
+            numberQuestions.setText("You finished "+totalQuestions+ " questions in");
+        }
 
     }
 }
