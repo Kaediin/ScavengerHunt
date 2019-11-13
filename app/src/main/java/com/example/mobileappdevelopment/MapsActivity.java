@@ -29,10 +29,8 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.sql.Time;
 import java.text.DecimalFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -61,7 +59,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Button mButtonChoice3;
 
     private long startTime;
-    private long endTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -297,7 +294,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void isDone(int numberAscending){
         if (numberAscending >= QuestionLibrary.questions.size()){
-            endTime = Calendar.getInstance().getTimeInMillis();
+            long endTime = Calendar.getInstance().getTimeInMillis();
             long time = endTime - startTime;
             Intent i = new Intent(MapsActivity.this, DoneActivity.class);
             i.putExtra("questions", numberAscending);

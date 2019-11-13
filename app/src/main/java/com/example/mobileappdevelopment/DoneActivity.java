@@ -1,5 +1,6 @@
 package com.example.mobileappdevelopment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -7,9 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class DoneActivity extends AppCompatActivity {
 
-    private TextView timeView;
-    private TextView numberQuestions;
-
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -25,9 +24,8 @@ public class DoneActivity extends AppCompatActivity {
         long hours = minutes / 60;
 
 
-
-        timeView = findViewById(R.id.timer);
-        numberQuestions = findViewById(R.id.numberQuestions);
+        TextView timeView = findViewById(R.id.timer);
+        TextView numberQuestions = findViewById(R.id.numberQuestions);
 
         timeView.setText("Hours: "+hours+"\nMinutes: "+minutes+"\nSeconds: "+seconds);
         if (totalQuestions == 1){
