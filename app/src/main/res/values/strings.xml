@@ -23,4 +23,7 @@
     <string name="placeholder_button_answer1">Loading…</string>
     <string name="placeholder_button_answer2">Loading…</string>
     <string name="placeholder_button_answer3">Loading…</string>
+
+<!--    activity_done.xml-->
+    <string name="congratz_text">Congratulations!</string>
 </resources>
