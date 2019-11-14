@@ -11,7 +11,7 @@
 <!--    activity_main.xml-->
     <string name="info_title">Information:</string>
     <string name="info_subject">Creating a question:</string>
-    <string name="info_text">Creating a question is very simple. \nYou fill in all the textfields and select which answer is the correct with the radiobuttons(the three vertical dots)</string>
+    <string name="info_text">Creating a question is very easy!\n1. Fill in all the textfields\n2. select which answer is right (with the 3 dots on the side)\n3. Choose a radius (10–50m) with the slider</string>
 
 <!--    activity_maps.xml-->
     <string name="placeholder_metersFromLoc"> </string>
