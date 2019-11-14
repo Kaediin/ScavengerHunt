@@ -65,6 +65,7 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
     private ProgressBar progressBar;
     private SeekBar seekBar;
 
+    @SuppressLint("InflateParams")
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -77,6 +78,11 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
             mapFragment.getMapAsync(this);
         }
 
+        start = findViewById(R.id.start_hunt);
+        panel = findViewById(R.id.loading_panel);
+        progressBar = findViewById(R.id.loading_circle);
+        selectLocationButton = findViewById(R.id.select_location_button);
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ChooseLocActivity.this);
@@ -86,10 +92,6 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
         builder.setCancelable(false);
         dialog = builder.create();
 
-        selectLocationButton = findViewById(R.id.select_location_button);
-        start = findViewById(R.id.start_hunt);
-        progressBar = findViewById(R.id.loading_circle);
-        panel = findViewById(R.id.loading_panel);
 
         seekBar = popupDialogView.findViewById(R.id.seekbar);
         cancel = popupDialogView.findViewById(R.id.cancel_loc);
@@ -103,8 +105,10 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
 
         thumbView = LayoutInflater.from(popupDialogView.getContext()).inflate(R.layout.seekbar_layout_thumb, null, false);
 
-        selectLocationButton.setVisibility(View.GONE);
         start.setVisibility(View.GONE);
+        panel.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        selectLocationButton.setVisibility(View.GONE);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -115,6 +119,8 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
                 selectLocationButton.setVisibility(View.VISIBLE);
             }
         }, 2000);
+
+
     }
 
     @Override
@@ -124,9 +130,19 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                myPos = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(myPos).title("My position"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myPos, 15f));
+                try {
+                    myPos = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(myPos).title("My position"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myPos, 15f));
+                } catch (NullPointerException e) {
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(ChooseLocActivity.this, "Cannot track location", Toast.LENGTH_SHORT).show();
+                        }
+                    }, 3000);
+                }
             }
         });
 
@@ -135,6 +151,9 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
             public void onMapClick(LatLng latLng) {
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions().position(myPos).title("My position"));
+                for (LatLng chosenlatLng : Coordinates.getCoordinatesList()){
+                    mMap.addMarker(new MarkerOptions().position(chosenlatLng).title("Tapped location")).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.green_pin));
+                }
                 mMap.addMarker(new MarkerOptions().position(latLng).title("Tapped location")).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.blue_pin));
                 selectedLatLng = latLng;
             }
@@ -202,6 +221,11 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
                     answer3.setText("");
                     radioGroup.clearCheck();
 
+                    mMap.clear();
+                    mMap.addMarker(new MarkerOptions().position(myPos).title("My position"));
+                    for (LatLng latLng : Coordinates.getCoordinatesList()){
+                        mMap.addMarker(new MarkerOptions().position(latLng).title("Tapped location")).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.green_pin));
+                    }
 
                     start.setVisibility(View.VISIBLE);
                     Toast.makeText(ChooseLocActivity.this, "Location added!", Toast.LENGTH_SHORT).show();
@@ -245,5 +269,4 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
 
         return new BitmapDrawable(getResources(), bitmap);
     }
-
 }

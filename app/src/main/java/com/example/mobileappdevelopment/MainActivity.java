@@ -1,8 +1,12 @@
 package com.example.mobileappdevelopment;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,12 +17,15 @@ import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
 
+    LocationManager manager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button startButton = findViewById(R.id.buttonStart);
+        final Button startButton = findViewById(R.id.buttonStart);
+        manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -27,8 +34,12 @@ public class MainActivity extends AppCompatActivity {
                         != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                 } else {
-                    Intent i = new Intent(MainActivity.this, ChooseLocActivity.class);
-                    startActivity(i);
+                    if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        Intent i = new Intent(MainActivity.this, ChooseLocActivity.class);
+                        startActivity(i);
+                    } else {
+                        buildAlertMessageNoGps();
+                    }
                 }
             }
         });
@@ -40,9 +51,31 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent i = new Intent(MainActivity.this, ChooseLocActivity.class);
-                startActivity(i);
+                if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    Intent i = new Intent(MainActivity.this, ChooseLocActivity.class);
+                    startActivity(i);
+                }else {
+                    buildAlertMessageNoGps();
+                }
             }
         }
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 }

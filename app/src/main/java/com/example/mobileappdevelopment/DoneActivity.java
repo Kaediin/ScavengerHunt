@@ -23,11 +23,14 @@ public class DoneActivity extends AppCompatActivity {
         long minutes = seconds / 60;
         long hours = minutes / 60;
 
+        long actualSeconds = seconds - (minutes * 60);
+        long actualMinutes = minutes - (hours * 60);
+
 
         TextView timeView = findViewById(R.id.timer);
         TextView numberQuestions = findViewById(R.id.numberQuestions);
 
-        timeView.setText("Hours: "+hours+"\nMinutes: "+minutes+"\nSeconds: "+seconds);
+        timeView.setText("Hours: "+hours+"\nMinutes: "+actualMinutes+"\nSeconds: "+actualSeconds);
         if (totalQuestions == 1){
             numberQuestions.setText("You finished "+totalQuestions+ " question in");
         } else {
