@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     Intent i = new Intent(MainActivity.this, ChooseLocActivity.class);
                     startActivity(i);
-                }else {
+                } else {
                     buildAlertMessageNoGps();
                 }
             }

@@ -5,8 +5,6 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -16,6 +14,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -35,11 +38,6 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
@@ -137,7 +135,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng currentLoc = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.addMarker(new MarkerOptions()
                 .position(currentLoc)
-                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("marker_red", 65,110)))
+                .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(MapsActivity.this, "marker_red")))
                 .title("Marker in your current location"));
         loadCoordinates(numberAscending);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 15f));
@@ -147,10 +145,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         List<LatLng> coordinates = Coordinates.getCoordinatesList();
         mMap.addMarker(new MarkerOptions()
                 .position(coordinates.get(numberAscending))
-                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("marker_green", 65,110)))
+                .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(MapsActivity.this, "marker_green")))
                 .title("Coordinate " + numberAscending));
         mMap.addCircle(new CircleOptions().center(coordinates.get(numberAscending)).radius(QuestionLibrary.radius.get(numberAscending)));
-
     }
 
     private void startLocationUpdates() {
@@ -179,11 +176,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (ActivityCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mMap.clear();
-                LatLng currenLoc = new LatLng(location.getLatitude(), location.getLongitude());
+                LatLng currentLoc = new LatLng(location.getLatitude(), location.getLongitude());
                 loadCoordinates(numberAscending);
                 mMap.addMarker(new MarkerOptions()
-                        .position(currenLoc)
-                        .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("marker_red", 65,110)))
+                        .position(currentLoc)
+                        .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(MapsActivity.this, "marker_red")))
                         .title("Marker in your current location"));
 
                 double distanceInKM = setTVDistance(location);
@@ -325,11 +322,5 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mButtonChoice2.setText(QuestionLibrary.choices2.get(mQuestionNumber));
         mButtonChoice3.setText(QuestionLibrary.choices3.get(mQuestionNumber));
         mAnswer = QuestionLibrary.correctAnswers.get(mQuestionNumber);
-    }
-
-    public Bitmap resizeMapIcons(String iconName, int width, int height){
-        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),getResources().getIdentifier(iconName, "drawable", getPackageName()));
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
-        return resizedBitmap;
     }
 }

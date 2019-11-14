@@ -7,13 +7,13 @@ import java.util.List;
 
 class Coordinates {
 
-    private static List<LatLng> coordiantes = new ArrayList<>();
+    private static List<LatLng> coordinates = new ArrayList<>();
 
-    static void addCoordinates(LatLng latLng){
-        coordiantes.add(latLng);
+    static void addCoordinates(LatLng latLng) {
+        coordinates.add(latLng);
     }
 
-    static List<LatLng> getCoordinatesList(){
-        return coordiantes;
+    static List<LatLng> getCoordinatesList() {
+        return coordinates;
     }
 }

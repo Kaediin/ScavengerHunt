@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -23,6 +22,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -35,9 +37,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.Objects;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -96,9 +95,6 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
         builder.setCancelable(false);
         dialog = builder.create();
 
-        Bitmap bitmap;
-
-
         seekBar = popupDialogView.findViewById(R.id.seekbar);
         cancel = popupDialogView.findViewById(R.id.cancel_loc);
         add = popupDialogView.findViewById(R.id.add_new_loc);
@@ -140,7 +136,7 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
                     myPos = new LatLng(location.getLatitude(), location.getLongitude());
                     mMap.addMarker(new MarkerOptions()
                             .position(myPos)
-                            .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("marker_red", 65,110)))
+                            .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(ChooseLocActivity.this, "marker_red")))
                             .title("My position"));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myPos, 20f));
                 } catch (NullPointerException e) {
@@ -163,17 +159,17 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
                     mMap.clear();
                     mMap.addMarker(new MarkerOptions()
                             .position(myPos)
-                            .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("marker_red", 65,110)))
+                            .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(ChooseLocActivity.this, "marker_red")))
                             .title("My position"));
                     for (LatLng chosenlatLng : Coordinates.getCoordinatesList()) {
                         mMap.addMarker(new MarkerOptions()
                                 .position(chosenlatLng)
-                                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("marker_green", 65,110)))
+                                .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(ChooseLocActivity.this, "marker_green")))
                                 .title("Tapped location"));
                     }
                     mMap.addMarker(new MarkerOptions()
                             .position(latLng)
-                            .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("marker_blue", 65,110)))
+                            .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(ChooseLocActivity.this, "marker_blue")))
                             .title("Tapped location"));
                     selectedLatLng = latLng;
                 } else {
@@ -249,12 +245,12 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
                     mMap.clear();
                     mMap.addMarker(new MarkerOptions()
                             .position(myPos)
-                            .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("marker_red", 65,110)))
+                            .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(ChooseLocActivity.this, "marker_red")))
                             .title("My position"));
                     for (LatLng latLng : Coordinates.getCoordinatesList()) {
                         mMap.addMarker(new MarkerOptions()
                                 .position(latLng)
-                                .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("marker_green", 65,110)))
+                                .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(ChooseLocActivity.this, "marker_green")))
                                 .title("Tapped location"));
                     }
 
@@ -299,10 +295,5 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
         thumbView.draw(canvas);
 
         return new BitmapDrawable(getResources(), bitmap);
-    }
-
-    public Bitmap resizeMapIcons(String iconName,int width, int height){
-        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),getResources().getIdentifier(iconName, "drawable", getPackageName()));
-        return Bitmap.createScaledBitmap(imageBitmap, width, height, false);
     }
 }

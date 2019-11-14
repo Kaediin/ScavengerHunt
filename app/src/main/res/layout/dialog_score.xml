@@ -21,7 +21,7 @@
             android:layout_marginBottom="5dp"
             android:text="@string/question_text"
             android:textColor="@color/white"
-            android:textSize="30sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/question_value"
@@ -31,7 +31,7 @@
             android:layout_marginBottom="5dp"
             android:text=""
             android:textColor="@color/white"
-            android:textSize="30sp"
+            android:textSize="20sp"
             tools:ignore="RelativeOverlap" />
     </RelativeLayout>
 
@@ -50,7 +50,7 @@
             android:layout_marginBottom="5dp"
             android:text="@string/hours_text"
             android:textColor="@color/white"
-            android:textSize="30sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/hours_value"
@@ -60,7 +60,7 @@
             android:layout_marginBottom="5dp"
             android:text=""
             android:textColor="@color/white"
-            android:textSize="30sp"
+            android:textSize="20sp"
             tools:ignore="RelativeOverlap" />
     </RelativeLayout>
 
@@ -79,7 +79,7 @@
             android:layout_marginBottom="5dp"
             android:text="@string/minutes_text"
             android:textColor="@color/white"
-            android:textSize="30sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/minutes_value"
@@ -89,7 +89,7 @@
             android:layout_marginBottom="5dp"
             android:text=""
             android:textColor="@color/white"
-            android:textSize="30sp"
+            android:textSize="20sp"
             tools:ignore="RelativeOverlap" />
     </RelativeLayout>
 
@@ -101,23 +101,25 @@
         android:layout_margin="20dp"
         android:background="@drawable/border">
 
-            <TextView
-                android:id="@+id/seconds_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/seconds_text"
-                android:textColor="@color/white"
-                android:textSize="30sp" />
+        <TextView
+            android:id="@+id/seconds_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="@string/seconds_text"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/seconds_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:text=""
-                android:textColor="@color/white"
-                android:textSize="30sp"
-                tools:ignore="RelativeOverlap" />
+        <TextView
+            android:id="@+id/seconds_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="5dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            tools:ignore="RelativeOverlap" />
     </RelativeLayout>
 
 </RelativeLayout>

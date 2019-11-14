@@ -11,7 +11,7 @@
 <!--    activity_main.xml-->
     <string name="info_title">Information:</string>
     <string name="info_subject">Creating a question:</string>
-    <string name="info_text">Creating a question is very easy!\n1. Fill in all the textfields\n2. select which answer is right (with the 3 dots on the side)\n3. Choose a radius (10–50m) with the slider</string>
+    <string name="info_text">Creating a question is very easy!\n1. Fill in all the text-fields\n2. select which answer is right (with the 3 dots on the side)\n3. Choose a radius (10–50m) with the slider</string>
 
 <!--    activity_maps.xml-->
     <string name="placeholder_metersFromLoc"> </string>
@@ -25,14 +25,14 @@
     <string name="cancel_dialog_button">Cancel</string>
     <string name="radius_text">Radius in  meters</string>
 
-<!--    dialog_quetion.xml-->
+<!--    dialog_question.xml-->
     <string name="placeholder_question">Loading…</string>
     <string name="placeholder_button_answer1">Loading…</string>
     <string name="placeholder_button_answer2">Loading…</string>
     <string name="placeholder_button_answer3">Loading…</string>
 
 <!--    activity_done.xml-->
-    <string name="congratz_text">Congratulations!</string>
+    <string name="congratulations_text">Congratulations!</string>
 
 <!--    activity_done_dialog-->
     <string name="question_text">Questions:</string>

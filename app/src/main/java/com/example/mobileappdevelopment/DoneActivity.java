@@ -2,9 +2,6 @@ package com.example.mobileappdevelopment;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,10 +21,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.Objects;
 
 public class DoneActivity extends AppCompatActivity implements OnMapReadyCallback {
-
-    private GoogleMap mMap;
-
-    private ImageButton imageButton;
 
     private AlertDialog dialog;
 
@@ -73,7 +66,7 @@ public class DoneActivity extends AppCompatActivity implements OnMapReadyCallbac
         min.setText(String.valueOf(actualMinutes));
         sec.setText(String.valueOf(actualSeconds));
 
-        imageButton = findViewById(R.id.image_button_score);
+        ImageButton imageButton = findViewById(R.id.image_button_score);
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,22 +79,16 @@ public class DoneActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
         int teller = 1;
 
         for (LatLng latLng : Coordinates.getCoordinatesList()) {
-            mMap.addMarker(new MarkerOptions()
+            googleMap.addMarker(new MarkerOptions()
                     .position(latLng)
-                    .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("marker_green", 65, 110)))
+                    .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(DoneActivity.this, "marker_green")))
                     .title("Marker " + teller)
             );
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20f));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20f));
             teller++;
         }
-    }
-
-    public Bitmap resizeMapIcons(String iconName, int width, int height) {
-        Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), getResources().getIdentifier(iconName, "drawable", getPackageName()));
-        return Bitmap.createScaledBitmap(imageBitmap, width, height, false);
     }
 }
