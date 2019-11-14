@@ -168,102 +168,107 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onLocationChanged(Location location) {
         if (location != null && !dialogActive) {
+            if (ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                mMap.clear();
+                LatLng currenLoc = new LatLng(location.getLatitude(), location.getLongitude());
+                loadCoordinates(numberAscending);
+                mMap.addMarker(new MarkerOptions().position(currenLoc).title("Marker in your current location"));
 
-            mMap.clear();
-            LatLng currenLoc = new LatLng(location.getLatitude(), location.getLongitude());
-            loadCoordinates(numberAscending);
-            mMap.addMarker(new MarkerOptions().position(currenLoc).title("Marker in your current location"));
+                double distanceInKM = setTVDistance(location);
 
-            double distanceInKM = setTVDistance(location);
+                if (distanceInKM < QuestionLibrary.radius.get(numberAscending)) {
 
-            if (distanceInKM < QuestionLibrary.radius.get(numberAscending)) {
+                    dialogActive = true;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    LayoutInflater layoutInflater = LayoutInflater.from(this);
+                    @SuppressLint("InflateParams") View popupDialogView = layoutInflater.inflate(R.layout.dialog_question, null);
+                    builder.setView(popupDialogView);
+                    builder.setCancelable(false);
+                    final AlertDialog dialog = builder.create();
+                    dialog.show();
 
-                dialogActive = true;
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                LayoutInflater layoutInflater = LayoutInflater.from(this);
-                @SuppressLint("InflateParams") View popupDialogView = layoutInflater.inflate(R.layout.dialog_question, null);
-                builder.setView(popupDialogView);
-                builder.setCancelable(false);
-                final AlertDialog dialog = builder.create();
-                dialog.show();
+                    mQuestionView = popupDialogView.findViewById(R.id.question);
+                    mButtonChoice1 = popupDialogView.findViewById(R.id.button_1);
+                    mButtonChoice2 = popupDialogView.findViewById(R.id.button_2);
+                    mButtonChoice3 = popupDialogView.findViewById(R.id.button_3);
 
-                mQuestionView = popupDialogView.findViewById(R.id.question);
-                mButtonChoice1 = popupDialogView.findViewById(R.id.button_1);
-                mButtonChoice2 = popupDialogView.findViewById(R.id.button_2);
-                mButtonChoice3 = popupDialogView.findViewById(R.id.button_3);
+                    updateQuestions(numberAscending);
+                    final Handler handler = new Handler();
 
-                updateQuestions(numberAscending);
-                final Handler handler = new Handler();
+                    if (mButtonChoice1 != null) {
+                        mButtonChoice1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-                if (mButtonChoice1 != null) {
-                    mButtonChoice1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            if (mButtonChoice1.getText().equals(mAnswer)) {
-                                mButtonChoice1.setBackgroundTintList(MapsActivity.this.getResources().getColorStateList(R.color.green));
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        dialog.dismiss();
-                                        numberAscending++;
-                                        dialogActive = false;
-                                        isDone(numberAscending);
-                                    }
-                                },1000);
-                            } else {
-                                mButtonChoice1.setBackgroundTintList(MapsActivity.this.getResources().getColorStateList(R.color.red));
+                                if (mButtonChoice1.getText().equals(mAnswer)) {
+                                    mButtonChoice1.setBackgroundTintList(MapsActivity.this.getResources().getColorStateList(R.color.green));
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            dialog.dismiss();
+                                            numberAscending++;
+                                            dialogActive = false;
+                                            isDone(numberAscending);
+                                        }
+                                    }, 1000);
+                                } else {
+                                    mButtonChoice1.setBackgroundTintList(MapsActivity.this.getResources().getColorStateList(R.color.red));
+                                }
                             }
-                        }
-                    });
-                }
+                        });
+                    }
 
-                if (mButtonChoice2 != null) {
-                    mButtonChoice2.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                    if (mButtonChoice2 != null) {
+                        mButtonChoice2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-                            if (mButtonChoice2.getText().equals(mAnswer)) {
-                                mButtonChoice2.setBackgroundTintList(MapsActivity.this.getResources().getColorStateList(R.color.green));
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        dialog.dismiss();
-                                        numberAscending++;
-                                        dialogActive = false;
-                                        isDone(numberAscending);
-                                    }
-                                },1000);
-                            } else {
-                                mButtonChoice2.setBackgroundTintList(MapsActivity.this.getResources().getColorStateList(R.color.red));
+                                if (mButtonChoice2.getText().equals(mAnswer)) {
+                                    mButtonChoice2.setBackgroundTintList(MapsActivity.this.getResources().getColorStateList(R.color.green));
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            dialog.dismiss();
+                                            numberAscending++;
+                                            dialogActive = false;
+                                            isDone(numberAscending);
+                                        }
+                                    }, 1000);
+                                } else {
+                                    mButtonChoice2.setBackgroundTintList(MapsActivity.this.getResources().getColorStateList(R.color.red));
+                                }
                             }
-                        }
-                    });
-                }
+                        });
+                    }
 
-                if (mButtonChoice3 != null) {
-                    mButtonChoice3.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                    if (mButtonChoice3 != null) {
+                        mButtonChoice3.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-                            if (mButtonChoice3.getText().equals(mAnswer)) {
-                                mButtonChoice3.setBackgroundTintList(MapsActivity.this.getResources().getColorStateList(R.color.green));
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        dialog.dismiss();
-                                        numberAscending++;
-                                        dialogActive = false;
-                                        isDone(numberAscending);
-                                    }
-                                },1000);
-                            } else {
-                                mButtonChoice3.setBackgroundTintList(MapsActivity.this.getResources().getColorStateList(R.color.red));
+                                if (mButtonChoice3.getText().equals(mAnswer)) {
+                                    mButtonChoice3.setBackgroundTintList(MapsActivity.this.getResources().getColorStateList(R.color.green));
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            dialog.dismiss();
+                                            numberAscending++;
+                                            dialogActive = false;
+                                            isDone(numberAscending);
+                                        }
+                                    }, 1000);
+                                } else {
+                                    mButtonChoice3.setBackgroundTintList(MapsActivity.this.getResources().getColorStateList(R.color.red));
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
-
+            } else {
+                Toast.makeText(this, "You need to enable permissions to display your location!", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(MapsActivity.this, MainActivity.class);
+                startActivity(i);
             }
         }
     }
@@ -291,8 +296,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    public void isDone(int numberAscending){
-        if (numberAscending >= QuestionLibrary.questions.size()){
+    public void isDone(int numberAscending) {
+        if (numberAscending >= QuestionLibrary.questions.size()) {
             long endTime = Calendar.getInstance().getTimeInMillis();
             long time = endTime - startTime;
             Intent i = new Intent(MapsActivity.this, DoneActivity.class);
@@ -304,10 +309,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void updateQuestions(int mQuestionNumber) {
 
-            mQuestionView.setText(QuestionLibrary.questions.get(mQuestionNumber));
-            mButtonChoice1.setText(QuestionLibrary.choices1.get(mQuestionNumber));
-            mButtonChoice2.setText(QuestionLibrary.choices2.get(mQuestionNumber));
-            mButtonChoice3.setText(QuestionLibrary.choices3.get(mQuestionNumber));
-            mAnswer = QuestionLibrary.correctAnswers.get(mQuestionNumber);
+        mQuestionView.setText(QuestionLibrary.questions.get(mQuestionNumber));
+        mButtonChoice1.setText(QuestionLibrary.choices1.get(mQuestionNumber));
+        mButtonChoice2.setText(QuestionLibrary.choices2.get(mQuestionNumber));
+        mButtonChoice3.setText(QuestionLibrary.choices3.get(mQuestionNumber));
+        mAnswer = QuestionLibrary.correctAnswers.get(mQuestionNumber);
     }
 }

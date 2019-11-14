@@ -1,8 +1,10 @@
 package com.example.mobileappdevelopment;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -34,6 +36,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -149,13 +152,20 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                mMap.clear();
-                mMap.addMarker(new MarkerOptions().position(myPos).title("My position"));
-                for (LatLng chosenlatLng : Coordinates.getCoordinatesList()){
-                    mMap.addMarker(new MarkerOptions().position(chosenlatLng).title("Tapped location")).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.green_pin));
+                if (ActivityCompat.checkSelfPermission(ChooseLocActivity.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    mMap.clear();
+                    mMap.addMarker(new MarkerOptions().position(myPos).title("My position"));
+                    for (LatLng chosenlatLng : Coordinates.getCoordinatesList()) {
+                        mMap.addMarker(new MarkerOptions().position(chosenlatLng).title("Tapped location")).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.green_pin));
+                    }
+                    mMap.addMarker(new MarkerOptions().position(latLng).title("Tapped location")).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.blue_pin));
+                    selectedLatLng = latLng;
+                } else {
+                    Toast.makeText(ChooseLocActivity.this, "You need to enable permissions to display your location!", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(ChooseLocActivity.this, MainActivity.class);
+                    startActivity(i);
                 }
-                mMap.addMarker(new MarkerOptions().position(latLng).title("Tapped location")).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.blue_pin));
-                selectedLatLng = latLng;
             }
         });
 
@@ -223,7 +233,7 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
 
                     mMap.clear();
                     mMap.addMarker(new MarkerOptions().position(myPos).title("My position"));
-                    for (LatLng latLng : Coordinates.getCoordinatesList()){
+                    for (LatLng latLng : Coordinates.getCoordinatesList()) {
                         mMap.addMarker(new MarkerOptions().position(latLng).title("Tapped location")).setIcon(BitmapDescriptorFactory.fromResource(R.drawable.green_pin));
                     }
 
