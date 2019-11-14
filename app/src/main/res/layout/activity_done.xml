@@ -4,41 +4,22 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
-    <RelativeLayout
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".DoneActivity" />
+
+    <ImageButton
+        android:id="@+id/image_button_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        tools:ignore="UselessParent">
-
-        <TextView
-            android:id="@+id/done_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/congratz_text"
-            android:textColor="@color/white"
-            android:textSize="50sp" />
-
-        <TextView
-            android:id="@+id/numberQuestions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:layout_marginTop="5sp"
-            android:textColor="@color/white"
-            android:layout_below="@+id/done_text"
-            android:textSize="30sp"
-            android:layout_centerInParent="true"/>
-        <TextView
-            android:id="@+id/timer"
-            android:layout_marginTop="50dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:text=""
-            android:layout_below="@+id/done_text"
-            android:textSize="25sp"
-            android:layout_centerInParent="true"/>
-
-    </RelativeLayout>
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:hapticFeedbackEnabled="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_list_alt"
+        tools:ignore="ContentDescription" />
 
 </RelativeLayout>

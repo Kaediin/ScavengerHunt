@@ -33,4 +33,10 @@
 
 <!--    activity_done.xml-->
     <string name="congratz_text">Congratulations!</string>
+
+<!--    activity_done_dialog-->
+    <string name="question_text">Questions:</string>
+    <string name="hours_text">Hours:</string>
+    <string name="minutes_text">Minutes:</string>
+    <string name="seconds_text">Seconds:</string>
 </resources>

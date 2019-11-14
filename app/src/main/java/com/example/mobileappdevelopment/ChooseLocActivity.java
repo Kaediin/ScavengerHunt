@@ -142,7 +142,7 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
                             .position(myPos)
                             .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("marker_red", 65,110)))
                             .title("My position"));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myPos, 15f));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myPos, 20f));
                 } catch (NullPointerException e) {
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -303,7 +303,6 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
 
     public Bitmap resizeMapIcons(String iconName,int width, int height){
         Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(),getResources().getIdentifier(iconName, "drawable", getPackageName()));
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
-        return resizedBitmap;
+        return Bitmap.createScaledBitmap(imageBitmap, width, height, false);
     }
 }
