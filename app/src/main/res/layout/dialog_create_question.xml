@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/new_question"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="25dp">
 
         <EditText
@@ -92,31 +92,6 @@
                 android:layout_marginTop="20dp" />
 
         </RadioGroup>
-
-        <Button
-            android:id="@+id/cancel_loc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/radio_group"
-            android:layout_marginTop="50dp"
-            android:backgroundTint="@color/red"
-            android:hapticFeedbackEnabled="true"
-            android:padding="15dp"
-            android:text="@string/cancel_dialog_button"
-            android:textColor="@color/white" />
-
-        <Button
-            android:id="@+id/add_new_loc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/radio_group"
-            android:layout_marginTop="50dp"
-            android:layout_toEndOf="@id/cancel_loc"
-            android:backgroundTint="@color/green"
-            android:hapticFeedbackEnabled="true"
-            android:padding="15dp"
-            android:text="@string/add_loc_dialog_button"
-            android:textColor="@color/white" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -144,6 +119,34 @@
             tools:targetApi="o" />
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rel_dialog"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true">
+    <Button
+        android:id="@+id/cancel_loc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:backgroundTint="@color/red"
+        android:hapticFeedbackEnabled="true"
+        android:padding="15dp"
+        android:text="@string/cancel_dialog_button"
+        android:textColor="@color/white" />
 
-
+    <Button
+        android:id="@+id/add_new_loc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_toEndOf="@id/cancel_loc"
+        android:backgroundTint="@color/green"
+        android:hapticFeedbackEnabled="true"
+        android:padding="15dp"
+        android:text="@string/add_loc_dialog_button"
+        android:textColor="@color/white" />
+    </RelativeLayout>
 </RelativeLayout>
