@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "980704259454",
+    "firebase_url": "https://scavenger-hunt-kaedin.firebaseio.com",
+    "project_id": "scavenger-hunt-kaedin",
+    "storage_bucket": "scavenger-hunt-kaedin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980704259454:android:1c67cf6c1c16a58d21172f",
+        "android_client_info": {
+          "package_name": "com.example.mobileappdevelopment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "980704259454-8e0sa5ocehnvihlqustq4l2md5lv3g2v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfApFcHtoOxvjHK63vYXl_cLDoBUm76ZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "980704259454-8e0sa5ocehnvihlqustq4l2md5lv3g2v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

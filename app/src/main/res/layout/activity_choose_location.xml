@@ -32,7 +32,7 @@
         android:layout_marginBottom="5dp"
         android:backgroundTint="@color/colorAccent"
         android:hapticFeedbackEnabled="true"
-        android:text="@string/start_hunt_button"
+        android:text="@string/start_create_new_hunt_button"
         android:textColor="@color/white" />
 
     <View
