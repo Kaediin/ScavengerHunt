@@ -1,20 +1,34 @@
 package com.example.mobileappdevelopment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-public class ChooseHuntActivity extends AppCompatActivity implements RecycleViewAdapter.ItemClickListener{
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+public class ChooseHuntActivity extends AppCompatActivity implements RecycleViewAdapter.ItemClickListener {
 
     RecycleViewAdapter adapter;
-
+    List<String> namesId;
 
     @Override
     protected void onCreate(Bundle savedInstances) {
@@ -22,17 +36,24 @@ public class ChooseHuntActivity extends AppCompatActivity implements RecycleView
         setContentView(R.layout.activity_choose_hunt);
 
         // data to populate the RecyclerView with
-        ArrayList<String> animalNames = new ArrayList<>();
-        animalNames.add("Horse");
-        animalNames.add("Cow");
-        animalNames.add("Camel");
-        animalNames.add("Sheep");
-        animalNames.add("Goat");
+        namesId = new ArrayList<>();
+
+        FirebaseFirestore fb = FirebaseFirestore.getInstance();
+        Task<QuerySnapshot> query = fb.collection("users").get();
+        query.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for (QueryDocumentSnapshot query : task.getResult()){
+                    namesId.add(query.getId());
+                }
+            }
+        });
+
 
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.rvHunts);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RecycleViewAdapter(this, animalNames);
+        adapter = new RecycleViewAdapter(this, namesId);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 

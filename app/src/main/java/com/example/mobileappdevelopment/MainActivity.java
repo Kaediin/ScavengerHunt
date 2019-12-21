@@ -19,9 +19,11 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,32 +37,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FirebaseFirestore fb = FirebaseFirestore.getInstance();
+        CollectionReference cr = fb.collection("users");
 
-
-//        // Create a new user with a first and last name
-//        Map<String, Object> user = new HashMap<>();
-//        user.put("first", "Ada");
-//        user.put("middle", "Adam");
-//        user.put("last", "Lovelace");
-//        user.put("born", 1815);
-//
-//        // Add a new document with a generated ID
-//        fb.collection("users")
-//                .add(user)
-//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                    @Override
-//                    public void onSuccess(DocumentReference documentReference) {
-//                        Log.d("FB", "DocumentSnapshot added with ID: " + documentReference.getId());
-//                        Toast.makeText(MainActivity.this, "Worked", Toast.LENGTH_SHORT).show();
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w("FB", "Error adding document", e);
-//                        Toast.makeText(MainActivity.this, "Did not work", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+        Map<String, Object> map = new HashMap<>();
+        map.put("first", "Kaedin");
+        map.put("middel", "Nothing");
+        map.put("last", "Schouten");
+        cr.document("user").set(map);
 
         final Button create_new_button = findViewById(R.id.button_create_new);
         final Button start_selected = findViewById(R.id.button_start_selected);
