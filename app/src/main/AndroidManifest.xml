@@ -43,6 +43,16 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ChooseHuntActivity"
+            android:label="Choose Hunt"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".ChooseLocActivity"
             android:screenOrientation="portrait">
             <intent-filter>

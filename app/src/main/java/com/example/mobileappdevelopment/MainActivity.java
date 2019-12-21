@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                     requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                 } else {
                     if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        Intent i = new Intent(MainActivity.this, ChooseLocActivity.class);
+                        Intent i = new Intent(MainActivity.this, ChooseHuntActivity.class);
                         startActivity(i);
                     } else {
                         buildAlertMessageNoGps();
