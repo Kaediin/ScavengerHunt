@@ -38,6 +38,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -138,13 +139,11 @@ public class MainActivity extends AppCompatActivity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-//            updateUI(account);
-            Toast.makeText(this, "Welcome "+ account.getDisplayName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Welcome "+ Objects.requireNonNull(account).getDisplayName(), Toast.LENGTH_SHORT).show();
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w("Kaedin", "signInResult:failed code=" + e);
-            Toast.makeText(this, "Failure", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Sign in rejected. Going further as 'Anonymous'", Toast.LENGTH_SHORT).show();
 //            updateUI(null);
         }
     }
