@@ -5,10 +5,10 @@ import java.util.List;
 
 class QuestionLibrary {
 
-    static List<String> questions = new ArrayList<>();
-    static List<String> choices1 = new ArrayList<>();
-    static List<String> choices2 = new ArrayList<>();
-    static List<String> choices3 = new ArrayList<>();
-    static List<String> correctAnswers = new ArrayList<>();
-    static List<Integer> radius = new ArrayList<>();
+    public static List<String> questions = new ArrayList<>();
+    public static List<String> choices1 = new ArrayList<>();
+    public static List<String> choices2 = new ArrayList<>();
+    public static List<String> choices3 = new ArrayList<>();
+    public static List<String> correctAnswers = new ArrayList<>();
+    public static List<Integer> radius = new ArrayList<>();
 }

@@ -1,6 +1,7 @@
 package com.example.mobileappdevelopment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,8 +10,10 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -43,7 +46,14 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
 
     private LocationManager manager;
+
+    private EditText title_hunt;
+
+    private Button save_title_hunt;
+
     private GoogleSignInClient mGoogleSignInClient;
+
+    private AlertDialog dialog;
 
 
     @Override
@@ -51,20 +61,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirebaseFirestore fb = FirebaseFirestore.getInstance();
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        CollectionReference cr = fb.collection("users");
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
+        @SuppressLint("InflateParams") View popupDialogView = layoutInflater.inflate(R.layout.title_select_dialog, null);
+        builder.setView(popupDialogView);
+        dialog = builder.create();
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("first", "Kaedin");
-        map.put("middel", "Nothing");
-        map.put("last", "Schouten");
-        cr.document("user").set(map);
+        save_title_hunt = popupDialogView.findViewById(R.id.button_save_hunt_title);
+        title_hunt = popupDialogView.findViewById(R.id.edit_text_hunt_title);
 
         final Button create_new_button = findViewById(R.id.button_create_new);
         final Button start_selected = findViewById(R.id.button_start_selected);
@@ -79,8 +88,13 @@ public class MainActivity extends AppCompatActivity {
                     requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                 } else {
                     if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        Intent i = new Intent(MainActivity.this, ChooseLocActivity.class);
-                        startActivity(i);
+                        dialog.show();
+                        save_title_hunt.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                setTitleHunt();
+                            }
+                        });
                     } else {
                         buildAlertMessageNoGps();
                     }
@@ -111,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account == null){
+        if (account == null) {
             signIn();
         }
     }
@@ -139,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-            Toast.makeText(this, "Welcome "+ Objects.requireNonNull(account).getDisplayName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Welcome " + Objects.requireNonNull(account).getDisplayName(), Toast.LENGTH_SHORT).show();
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -180,6 +194,17 @@ public class MainActivity extends AppCompatActivity {
                 });
         final AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private void setTitleHunt() {
+        if (title_hunt.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Title cant be null", Toast.LENGTH_SHORT).show();
+        } else {
+            String title = title_hunt.getText().toString();
+            DataHunt.setTitleHunt(title);
+            Intent i = new Intent(MainActivity.this, ChooseLocActivity.class);
+            startActivity(i);
+        }
     }
 
 }

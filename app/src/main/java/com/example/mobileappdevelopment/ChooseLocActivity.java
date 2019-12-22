@@ -25,6 +25,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.example.mobileappdevelopment.Model.Hunt;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -35,7 +36,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -68,6 +74,10 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
     private ProgressBar progressBar;
     private SeekBar seekBar;
 
+    private Map<String, Object> huntMap;
+
+    private CollectionReference cr;
+
     @SuppressLint("InflateParams")
     @Override
     protected void onCreate(Bundle bundle) {
@@ -80,6 +90,8 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
+
+        FirebaseFirestore fb = FirebaseFirestore.getInstance();
 
         start = findViewById(R.id.start_hunt);
         panel = findViewById(R.id.loading_panel);
@@ -122,6 +134,8 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
             }
         }, 2000);
 
+        cr = fb.collection("Scavenger_Hunts");
+        huntMap = new HashMap<>();
 
     }
 
@@ -255,7 +269,7 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
                     }
 
                     start.setVisibility(View.VISIBLE);
-                    Toast.makeText(ChooseLocActivity.this, "Location added!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChooseLocActivity.this, "Location added", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 } else {
                     Toast.makeText(ChooseLocActivity.this, "Please fill in all the fields", Toast.LENGTH_SHORT).show();
@@ -266,7 +280,27 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ChooseLocActivity.this, MapsActivity.class);
+                Hunt hunt = new Hunt();
+                hunt.setAnswer1(QuestionLibrary.choices1);
+                hunt.setAnswer2(QuestionLibrary.choices2);
+                hunt.setAnswer3(QuestionLibrary.choices3);
+                hunt.setCoordinates(Coordinates.getCoordinatesList());
+                hunt.setCorrectAnswer(QuestionLibrary.correctAnswers);
+                hunt.setRadius(QuestionLibrary.radius);
+                hunt.setQuestions(QuestionLibrary.questions);
+                hunt.setTitle(DataHunt.getTitleHunt());
+                hunt.setAuthor("Kaedin Schouten");
+
+                Gson gson = new Gson();
+                String huntString = gson.toJson(hunt);
+
+                huntMap.put("Author", hunt.getAuthor());
+                huntMap.put("Title", hunt.getTitle());
+                huntMap.put("HuntFile", huntString);
+                cr.document("hunt").set(huntMap);
+
+                Toast.makeText(ChooseLocActivity.this, "Hunt '"+hunt.getTitle()+"' is saved", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(ChooseLocActivity.this, MainActivity.class);
                 startActivity(i);
             }
         });
