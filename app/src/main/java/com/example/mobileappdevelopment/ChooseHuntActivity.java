@@ -1,7 +1,6 @@
 package com.example.mobileappdevelopment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,22 +12,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class ChooseHuntActivity extends AppCompatActivity implements RecycleViewAdapter.ItemClickListener {
 
     RecycleViewAdapter adapter;
     List<String> namesId;
+    FirebaseFirestore fb;
 
     @Override
     protected void onCreate(Bundle savedInstances) {
@@ -38,18 +34,38 @@ public class ChooseHuntActivity extends AppCompatActivity implements RecycleView
         // data to populate the RecyclerView with
         namesId = new ArrayList<>();
 
-        FirebaseFirestore fb = FirebaseFirestore.getInstance();
+        // connect to database
+        fb = FirebaseFirestore.getInstance();
+
+        // fill the list with the right data
+        populateList();
+
+        // display the list in a recycle layout
+        display();
+
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+    }
+
+    public void populateList(){
+
         Task<QuerySnapshot> query = fb.collection("users").get();
         query.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for (QueryDocumentSnapshot query : task.getResult()){
+                for (QueryDocumentSnapshot query : Objects.requireNonNull(task.getResult())){
                     namesId.add(query.getId());
                 }
+                display();
             }
         });
 
+    }
 
+    public void display(){
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.rvHunts);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -60,12 +76,6 @@ public class ChooseHuntActivity extends AppCompatActivity implements RecycleView
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 1);
         recyclerView.addItemDecoration(dividerItemDecoration);
-
-    }
-
-    @Override
-    public void onItemClick(View view, int position) {
-        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
     }
 
 }
