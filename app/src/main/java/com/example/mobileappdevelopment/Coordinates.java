@@ -7,7 +7,7 @@ import java.util.List;
 
 class Coordinates {
 
-    public static List<LatLng> coordinates = new ArrayList<>();
+    static List<LatLng> coordinates = new ArrayList<>();
 
     static void addCoordinates(LatLng latLng) {
         coordinates.add(latLng);
