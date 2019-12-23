@@ -1,14 +1,14 @@
 package com.example.mobileappdevelopment;
 
-public class DataHunt {
+class DataHunt {
 
-    static String title = null;
+    private static String title = null;
 
-    public static void setTitleHunt(String titleInput){
+    static void setTitleHunt(String titleInput){
         title = titleInput;
     }
 
-    public static String getTitleHunt(){
+    static String getTitleHunt(){
         return title;
     }
 }
