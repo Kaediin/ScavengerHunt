@@ -26,6 +26,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.example.mobileappdevelopment.Model.Hunt;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -65,6 +67,7 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
     private EditText answer3;
 
     private RadioGroup radioGroup;
+    private String username;
 
     private LatLng myPos;
 
@@ -85,20 +88,63 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
         setContentView(R.layout.activity_choose_location);
         Objects.requireNonNull(getSupportActionBar()).hide();
 
+        // Setting up map fragment
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
 
+        // Assigns default username. Username will change is user is signed in later on
+        username = "Anonymouse";
+
+        // Connect to firebase
         FirebaseFirestore fb = FirebaseFirestore.getInstance();
+
+        // Stores locationProvider in var
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        // Gets collection to store data
+        cr = fb.collection("Scavenger_Hunts");
+
+        // Creates a map where data will be stores into. This map will be stored into the FireBase
+        huntMap = new HashMap<>();
+
+        // Assign all layout elements
+        assignVars();
+
+        // Sets up splash screen
+        splash();
+
+        // Clears all the lists. So no data will be used from previous activities
+        clearLists();
+
+    }
+
+    public void splash(){
+        start.setVisibility(View.GONE);
+        panel.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        selectLocationButton.setVisibility(View.GONE);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                panel.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
+                selectLocationButton.setVisibility(View.VISIBLE);
+            }
+        }, 2000);
+    }
+
+    @SuppressLint("InflateParams")
+    public void assignVars(){
 
         start = findViewById(R.id.start_hunt);
         panel = findViewById(R.id.loading_panel);
         progressBar = findViewById(R.id.loading_circle);
         selectLocationButton = findViewById(R.id.select_location_button);
-
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ChooseLocActivity.this);
         LayoutInflater layoutInflater = LayoutInflater.from(ChooseLocActivity.this);
@@ -116,27 +162,27 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
         answer3 = popupDialogView.findViewById(R.id.edit_field_3);
         radioGroup = popupDialogView.findViewById(R.id.radio_group);
         selectedLatLng = null;
-
         thumbView = LayoutInflater.from(popupDialogView.getContext()).inflate(R.layout.seekbar_layout_thumb, null, false);
+    }
 
-        start.setVisibility(View.GONE);
-        panel.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
-        selectLocationButton.setVisibility(View.GONE);
+    public void clearLists(){
+        Coordinates.getCoordinatesList().clear();
+        QuestionLibrary.radius.clear();
+        QuestionLibrary.questions.clear();
+        QuestionLibrary.correctAnswers.clear();
+        QuestionLibrary.choices3.clear();
+        QuestionLibrary.choices2.clear();
+        QuestionLibrary.choices1.clear();
+    }
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                panel.setVisibility(View.GONE);
-                progressBar.setVisibility(View.GONE);
-                selectLocationButton.setVisibility(View.VISIBLE);
-            }
-        }, 2000);
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-        cr = fb.collection("Scavenger_Hunts");
-        huntMap = new HashMap<>();
-
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if (account != null) {
+            username = account.getDisplayName();
+        }
     }
 
     @Override
@@ -289,7 +335,9 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
                 hunt.setRadius(QuestionLibrary.radius);
                 hunt.setQuestions(QuestionLibrary.questions);
                 hunt.setTitle(DataHunt.getTitleHunt());
-                hunt.setAuthor("Kaedin Schouten");
+                hunt.setAuthor(username);
+
+//                CheckBox checkBox = findViewById(R.id.checkbox_status);
 
                 Gson gson = new Gson();
                 String huntString = gson.toJson(hunt);
@@ -297,7 +345,8 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
                 huntMap.put("Author", hunt.getAuthor());
                 huntMap.put("Title", hunt.getTitle());
                 huntMap.put("HuntFile", huntString);
-                cr.document("hunt").set(huntMap);
+//                huntMap.put("Status", checkBox.isChecked());
+                cr.document(hunt.getTitle()+hunt.getAuthor()).set(huntMap);
 
                 Toast.makeText(ChooseLocActivity.this, "Hunt '"+hunt.getTitle()+"' is saved", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(ChooseLocActivity.this, MainActivity.class);
