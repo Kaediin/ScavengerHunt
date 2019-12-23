@@ -14,9 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mobileappdevelopment.Model.Hunt;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -27,8 +24,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class ChooseHuntActivity extends AppCompatActivity implements RecycleViewAdapter.ItemClickListener {
-
-    private RecycleViewAdapter adapter;
 
     private List<String> namesId;
 
@@ -87,14 +82,13 @@ public class ChooseHuntActivity extends AppCompatActivity implements RecycleView
                 display();
             }
         });
-
     }
 
     public void display(){
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.rvHunts);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RecycleViewAdapter(this, namesId);
+        RecycleViewAdapter adapter = new RecycleViewAdapter(this, namesId);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
@@ -102,22 +96,4 @@ public class ChooseHuntActivity extends AppCompatActivity implements RecycleView
                 1);
         recyclerView.addItemDecoration(dividerItemDecoration);
     }
-
-//    public List<Hunt> getAllHunts() {
-//        final List<Hunt> hunts = new ArrayList<>();
-//
-//        CollectionReference notesRef = fb.collection("Scavenger_Hunts").get();
-//        notesRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    for (QueryDocumentSnapshot document : task.getResult()) {
-//
-//                    }
-//                }
-//            }
-//        });
-//
-//        return hunts;
-//    }
 }
