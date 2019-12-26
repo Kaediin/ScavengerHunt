@@ -1,4 +1,4 @@
-package com.example.mobileappdevelopment;
+package com.example.mobileappdevelopment.Activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -20,6 +20,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.example.mobileappdevelopment.DataUtils.Coordinates;
+import com.example.mobileappdevelopment.DataUtils.LocUtils;
+import com.example.mobileappdevelopment.Library.QuestionLibrary;
+import com.example.mobileappdevelopment.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;

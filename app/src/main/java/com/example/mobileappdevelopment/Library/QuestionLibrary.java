@@ -1,9 +1,9 @@
-package com.example.mobileappdevelopment;
+package com.example.mobileappdevelopment.Library;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class QuestionLibrary {
+public class QuestionLibrary {
 
     public static List<String> questions = new ArrayList<>();
     public static List<String> choices1 = new ArrayList<>();

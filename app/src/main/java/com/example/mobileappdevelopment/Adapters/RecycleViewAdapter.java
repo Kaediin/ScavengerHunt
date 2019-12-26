@@ -1,4 +1,4 @@
-package com.example.mobileappdevelopment;
+package com.example.mobileappdevelopment.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,8 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.mobileappdevelopment.R;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    RecycleViewAdapter(Context context, List<String> data) {
+    public RecycleViewAdapter(Context context, List<String> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
@@ -66,7 +67,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     }
 
     // allows clicks events to be caught
-    void setClickListener(ItemClickListener itemClickListener) {
+    public void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 

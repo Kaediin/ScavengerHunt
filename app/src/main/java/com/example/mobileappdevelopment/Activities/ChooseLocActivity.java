@@ -1,4 +1,4 @@
-package com.example.mobileappdevelopment;
+package com.example.mobileappdevelopment.Activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -25,7 +25,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.example.mobileappdevelopment.DataUtils.Coordinates;
+import com.example.mobileappdevelopment.DataUtils.DataHunt;
+import com.example.mobileappdevelopment.DataUtils.LocUtils;
 import com.example.mobileappdevelopment.Model.Hunt;
+import com.example.mobileappdevelopment.Library.QuestionLibrary;
+import com.example.mobileappdevelopment.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.location.FusedLocationProviderClient;

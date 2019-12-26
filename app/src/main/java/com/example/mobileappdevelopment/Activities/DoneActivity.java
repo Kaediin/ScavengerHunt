@@ -1,4 +1,4 @@
-package com.example.mobileappdevelopment;
+package com.example.mobileappdevelopment.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mobileappdevelopment.DataUtils.Coordinates;
+import com.example.mobileappdevelopment.DataUtils.LocUtils;
+import com.example.mobileappdevelopment.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
