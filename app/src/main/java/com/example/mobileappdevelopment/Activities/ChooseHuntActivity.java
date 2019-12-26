@@ -1,6 +1,8 @@
 package com.example.mobileappdevelopment.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -67,6 +69,7 @@ public class ChooseHuntActivity extends AppCompatActivity implements RecycleView
         QuestionLibrary.radius = allHunts.get(position).getRadius();
 
         Intent i = new Intent(ChooseHuntActivity.this, MapsActivity.class);
+        i.putExtra("hunt_name", allHunts.get(position).getTitle());
         startActivity(i);
     }
 

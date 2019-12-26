@@ -3,7 +3,9 @@ package com.example.mobileappdevelopment.Activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -45,10 +47,12 @@ import java.util.Objects;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
+    private AlertDialog dialog;
+
     private GoogleMap mMap;
     private GoogleApiClient googleApiClient;
 
-    private int numberAscending;
+    private int progress_number;
     private long time;
 
     private boolean dialogActive = false;
@@ -56,12 +60,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private TextView mQuestionView;
 
     private String mAnswer;
+    private String hunt_name;
 
     private Button mButtonChoice1;
     private Button mButtonChoice2;
     private Button mButtonChoice3;
 
-    private long startTime;
+    private long start_time;
+
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
+
+    private int progress;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +93,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 addConnectionCallbacks(this).
                 addOnConnectionFailedListener(this).build();
 
-        startTime = Calendar.getInstance().getTimeInMillis();
+        hunt_name = getIntent().getStringExtra("hunt_name");
+        sp = getSharedPreferences(hunt_name, Context.MODE_PRIVATE);
+        progress = sp.getInt(hunt_name, 0);
 
-        numberAscending = 0;
+        if (progress == 0){
+            start_time = Calendar.getInstance().getTimeInMillis();
+            editor = sp.edit();
+            editor.putLong(hunt_name+"start_time", start_time);
+            editor.apply();
+        } else {
+            start_time = sp.getLong(hunt_name+"start_time", Calendar.getInstance().getTimeInMillis());
+        }
+
+        progress_number = progress;
         time = 1000;
     }
 
@@ -141,7 +163,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .position(currentLoc)
                 .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(MapsActivity.this, "marker_red")))
                 .title("Marker in your current location"));
-        loadCoordinates(numberAscending);
+        loadCoordinates(progress_number);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 15f));
     }
 
@@ -181,7 +203,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mMap.clear();
                 LatLng currentLoc = new LatLng(location.getLatitude(), location.getLongitude());
-                loadCoordinates(numberAscending);
+                loadCoordinates(progress_number);
                 mMap.addMarker(new MarkerOptions()
                         .position(currentLoc)
                         .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(MapsActivity.this, "marker_red")))
@@ -189,7 +211,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 double distanceInKM = setTVDistance(location);
 
-                if (distanceInKM < QuestionLibrary.radius.get(numberAscending)) {
+                if (distanceInKM < QuestionLibrary.radius.get(progress_number)) {
 
                     dialogActive = true;
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -197,7 +219,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @SuppressLint("InflateParams") View popupDialogView = layoutInflater.inflate(R.layout.dialog_question, null);
                     builder.setView(popupDialogView);
                     builder.setCancelable(false);
-                    final AlertDialog dialog = builder.create();
+                    dialog = builder.create();
                     dialog.show();
 
                     mQuestionView = popupDialogView.findViewById(R.id.question);
@@ -205,7 +227,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     mButtonChoice2 = popupDialogView.findViewById(R.id.button_2);
                     mButtonChoice3 = popupDialogView.findViewById(R.id.button_3);
 
-                    updateQuestions(numberAscending);
+                    updateQuestions(progress_number);
                     final Handler handler = new Handler();
 
                     if (mButtonChoice1 != null) {
@@ -218,10 +240,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                            dialog.dismiss();
-                                            numberAscending++;
-                                            dialogActive = false;
-                                            isDone(numberAscending);
+                                            next_level();
+                                            isDone(progress_number);
                                         }
                                     }, 1000);
                                 } else {
@@ -241,10 +261,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                            dialog.dismiss();
-                                            numberAscending++;
-                                            dialogActive = false;
-                                            isDone(numberAscending);
+                                            next_level();
+                                            isDone(progress_number);
                                         }
                                     }, 1000);
                                 } else {
@@ -264,10 +282,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                            dialog.dismiss();
-                                            numberAscending++;
-                                            dialogActive = false;
-                                            isDone(numberAscending);
+                                            next_level();
+                                            isDone(progress_number);
                                         }
                                     }, 1000);
                                 } else {
@@ -288,14 +304,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @SuppressLint("SetTextI18n")
     private double setTVDistance(Location location) {
         Location locCheck = new Location(LocationManager.GPS_PROVIDER);
-        locCheck.setLatitude(Coordinates.getCoordinatesList().get(numberAscending).latitude);
-        locCheck.setLongitude(Coordinates.getCoordinatesList().get(numberAscending).longitude);
+        locCheck.setLatitude(Coordinates.getCoordinatesList().get(progress_number).latitude);
+        locCheck.setLongitude(Coordinates.getCoordinatesList().get(progress_number).longitude);
         double distanceInKM = (location.distanceTo(locCheck));
         TextView distanceTV = findViewById(R.id.distanceText);
         DecimalFormat distanceRounded = new DecimalFormat("###");
         distanceTV.setText((distanceRounded.format(distanceInKM)) + " M");
 
         return distanceInKM;
+    }
+
+    public void next_level(){
+        dialog.dismiss();
+        dialogActive = false;
+        progress_number++;
+        editor = sp.edit();
+        editor.putInt(hunt_name, progress_number);
+        editor.apply();
     }
 
     @Override
@@ -311,10 +336,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void isDone(int numberAscending) {
         if (numberAscending >= QuestionLibrary.questions.size()) {
             long endTime = Calendar.getInstance().getTimeInMillis();
-            long time = endTime - startTime;
+            long time = endTime - start_time;
+
+            editor = sp.edit();
+            editor.putInt(hunt_name, 0);
+            editor.putLong(hunt_name+"time", time);
+            editor.apply();
+
             Intent i = new Intent(MapsActivity.this, DoneActivity.class);
+            i.putExtra("hunt_name", hunt_name);
             i.putExtra("questions", numberAscending);
-            i.putExtra("time", time);
             startActivity(i);
         }
     }

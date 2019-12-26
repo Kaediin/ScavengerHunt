@@ -2,6 +2,8 @@ package com.example.mobileappdevelopment.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,10 +49,11 @@ public class DoneActivity extends AppCompatActivity implements OnMapReadyCallbac
         builder.setCancelable(true);
         dialog = builder.create();
 
-        Bundle extras = getIntent().getExtras();
-        assert extras != null;
-        long time = extras.getLong("time");
-        int totalQuestions = extras.getInt("questions");
+        int totalQuestions = getIntent().getIntExtra("questions", 0);
+        String huntName = getIntent().getStringExtra("hunt_name");
+
+        SharedPreferences sp = getSharedPreferences(huntName, Context.MODE_PRIVATE);
+        long time = sp.getLong(huntName+"time", 0);
 
         long seconds = time / 1000;
         long minutes = seconds / 60;

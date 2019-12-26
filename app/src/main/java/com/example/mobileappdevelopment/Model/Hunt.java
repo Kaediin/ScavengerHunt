@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Hunt {
 
-    private String title, author;
+    private String title, author, huntCode;
 
     private List<String> questions, answer1, answer2, answer3, correctAnswer;
 
@@ -27,6 +27,7 @@ public class Hunt {
         this.correctAnswer = correctAnswer;
         this.radius = radius;
         this.coordinates = coordinates;
+        this.huntCode = title+author;
     }
 
     public String getTitle() {
@@ -63,6 +64,10 @@ public class Hunt {
 
     public List<LatLng> getCoordinates() {
         return coordinates;
+    }
+
+    public String getHuntCode() {
+        return huntCode;
     }
 
     public void setTitle(String title) {
