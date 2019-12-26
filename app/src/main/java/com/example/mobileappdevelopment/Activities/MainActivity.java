@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    Intent i = new Intent(MainActivity.this, ChooseLocActivity.class);
+                    Intent i = new Intent(MainActivity.this, CreateHuntActivity.class);
                     startActivity(i);
                 } else {
                     buildAlertMessageNoGps();
@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             String title = title_hunt.getText().toString();
             DataHunt.setTitleHunt(title);
-            Intent i = new Intent(MainActivity.this, ChooseLocActivity.class);
+            Intent i = new Intent(MainActivity.this, CreateHuntActivity.class);
             startActivity(i);
         }
     }

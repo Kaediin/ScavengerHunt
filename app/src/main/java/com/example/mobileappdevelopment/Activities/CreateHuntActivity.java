@@ -51,7 +51,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyCallback {
 
 
     private GoogleMap mMap;
@@ -151,8 +151,8 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
         progressBar = findViewById(R.id.loading_circle);
         selectLocationButton = findViewById(R.id.select_location_button);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(ChooseLocActivity.this);
-        LayoutInflater layoutInflater = LayoutInflater.from(ChooseLocActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(CreateHuntActivity.this);
+        LayoutInflater layoutInflater = LayoutInflater.from(CreateHuntActivity.this);
         @SuppressLint("InflateParams") View popupDialogView = layoutInflater.inflate(R.layout.dialog_create_question, null);
         builder.setView(popupDialogView);
         builder.setCancelable(false);
@@ -201,7 +201,7 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
                     myPos = new LatLng(location.getLatitude(), location.getLongitude());
                     mMap.addMarker(new MarkerOptions()
                             .position(myPos)
-                            .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(ChooseLocActivity.this, "marker_red")))
+                            .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(CreateHuntActivity.this, "marker_red")))
                             .title("My position"));
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myPos, 20f));
                 } catch (NullPointerException e) {
@@ -209,7 +209,7 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(ChooseLocActivity.this, "Cannot track location", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CreateHuntActivity.this, "Cannot track location", Toast.LENGTH_SHORT).show();
                         }
                     }, 3000);
                 }
@@ -219,27 +219,27 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                if (ActivityCompat.checkSelfPermission(ChooseLocActivity.this,
+                if (ActivityCompat.checkSelfPermission(CreateHuntActivity.this,
                         Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     mMap.clear();
                     mMap.addMarker(new MarkerOptions()
                             .position(myPos)
-                            .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(ChooseLocActivity.this, "marker_red")))
+                            .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(CreateHuntActivity.this, "marker_red")))
                             .title("My position"));
                     for (LatLng chosenlatLng : Coordinates.getCoordinatesList()) {
                         mMap.addMarker(new MarkerOptions()
                                 .position(chosenlatLng)
-                                .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(ChooseLocActivity.this, "marker_green")))
+                                .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(CreateHuntActivity.this, "marker_green")))
                                 .title("Tapped location"));
                     }
                     mMap.addMarker(new MarkerOptions()
                             .position(latLng)
-                            .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(ChooseLocActivity.this, "marker_blue")))
+                            .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(CreateHuntActivity.this, "marker_blue")))
                             .title("Tapped location"));
                     selectedLatLng = latLng;
                 } else {
-                    Toast.makeText(ChooseLocActivity.this, "You need to enable permissions to display your location!", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(ChooseLocActivity.this, MainActivity.class);
+                    Toast.makeText(CreateHuntActivity.this, "You need to enable permissions to display your location!", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(CreateHuntActivity.this, MainActivity.class);
                     startActivity(i);
                 }
             }
@@ -252,7 +252,7 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
                     dialog.show();
                     question.requestFocus();
                 } else {
-                    Toast.makeText(ChooseLocActivity.this, "Please tap a location", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateHuntActivity.this, "Please tap a location", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -310,20 +310,20 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
                     mMap.clear();
                     mMap.addMarker(new MarkerOptions()
                             .position(myPos)
-                            .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(ChooseLocActivity.this, "marker_red")))
+                            .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(CreateHuntActivity.this, "marker_red")))
                             .title("My position"));
                     for (LatLng latLng : Coordinates.getCoordinatesList()) {
                         mMap.addMarker(new MarkerOptions()
                                 .position(latLng)
-                                .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(ChooseLocActivity.this, "marker_green")))
+                                .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(CreateHuntActivity.this, "marker_green")))
                                 .title("Tapped location"));
                     }
 
                     start.setVisibility(View.VISIBLE);
-                    Toast.makeText(ChooseLocActivity.this, "Location added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateHuntActivity.this, "Location added", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 } else {
-                    Toast.makeText(ChooseLocActivity.this, "Please fill in all the fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateHuntActivity.this, "Please fill in all the fields", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -353,8 +353,8 @@ public class ChooseLocActivity extends AppCompatActivity implements OnMapReadyCa
 //                huntMap.put("Status", checkBox.isChecked());
                 cr.document(hunt.getTitle()+hunt.getAuthor()).set(huntMap);
 
-                Toast.makeText(ChooseLocActivity.this, "Hunt '"+hunt.getTitle()+"' is saved", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(ChooseLocActivity.this, MainActivity.class);
+                Toast.makeText(CreateHuntActivity.this, "Hunt '"+hunt.getTitle()+"' is saved", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(CreateHuntActivity.this, MainActivity.class);
                 startActivity(i);
             }
         });
