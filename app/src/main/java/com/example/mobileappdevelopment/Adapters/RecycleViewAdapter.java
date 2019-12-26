@@ -1,80 +1,90 @@
 package com.example.mobileappdevelopment.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mobileappdevelopment.Activities.ChooseHuntActivity;
+import com.example.mobileappdevelopment.Activities.MapsActivity;
+import com.example.mobileappdevelopment.DataUtils.Coordinates;
+import com.example.mobileappdevelopment.DataUtils.DataHunt;
+import com.example.mobileappdevelopment.Library.QuestionLibrary;
+import com.example.mobileappdevelopment.Model.Hunt;
 import com.example.mobileappdevelopment.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.ViewHolder> {
+public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.ViewHolder>{
 
-    private List<String> mData;
-    private LayoutInflater mInflater;
-    private ItemClickListener mClickListener;
+    private List<String> titles = new ArrayList<>();
+    private List<String> authors = new ArrayList<>();
+    private Context mContext;
 
-    // data is passed into the constructor
-    public RecycleViewAdapter(Context context, List<String> data) {
-        this.mInflater = LayoutInflater.from(context);
-        this.mData = data;
-    }
+    public RecycleViewAdapter(Context mContext, List<String> titles, List<String> authors) {
+        this.titles = titles;
+        this.authors = authors;
+        this.mContext = mContext;
+        }
 
-    // inflates the row layout from xml when needed
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.list_item, parent, false);
-        return new ViewHolder(view);
+        // Inflates the view
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        ViewHolder holder = new ViewHolder(view);
+        return holder;
     }
 
-    // binds the data to the TextView in each row
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        String animal = mData.get(position);
-        holder.myTextView.setText(animal);
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+
+        final List<Hunt> hunts = DataHunt.getHunts();
+        holder.tvTitle.setText(titles.get(position));
+        holder.tvAuthor.setText(authors.get(position));
+        holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Toast.makeText(mContext, titles.get(position), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "You clicked " + hunts.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+                Coordinates.coordinates = hunts.get(position).getCoordinates();
+                QuestionLibrary.choices1 = hunts.get(position).getAnswer1();
+                QuestionLibrary.choices2 = hunts.get(position).getAnswer2();
+                QuestionLibrary.choices3 = hunts.get(position).getAnswer3();
+                QuestionLibrary.correctAnswers = hunts.get(position).getCorrectAnswer();
+                QuestionLibrary.questions = hunts.get(position).getQuestions();
+                QuestionLibrary.radius = hunts.get(position).getRadius();
+                Intent i = new Intent(mContext, MapsActivity.class);
+                i.putExtra("hunt_name", hunts.get(position).getTitle());
+                view.getContext().startActivity(i);
+            }
+        });
     }
 
-    // total number of rows
     @Override
     public int getItemCount() {
-        return mData.size();
+        return titles.size();
     }
 
+    public class ViewHolder extends RecyclerView.ViewHolder{
 
-    // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView myTextView;
+        TextView tvTitle;
+        TextView tvAuthor;
+        RelativeLayout relativeLayout;
 
-        ViewHolder(View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            myTextView = itemView.findViewById(R.id.title_hunt);
-            itemView.setOnClickListener(this);
+            tvTitle = itemView.findViewById(R.id.title_hunt);
+            tvAuthor = itemView.findViewById(R.id.author_hunt);
+            relativeLayout = itemView.findViewById(R.id.rel_layout_rec);
         }
-
-        @Override
-        public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
-        }
-    }
-
-    // convenience method for getting data at click position
-//    String getItem(int id) {
-//        return mData.get(id);
-//    }
-
-    // allows clicks events to be caught
-    public void setClickListener(ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
-    }
-
-    // parent activity will implement this method to respond to click events
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
     }
 }

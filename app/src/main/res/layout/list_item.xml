@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:id="@+id/rel_layout_rec">
 
     <TextView
         android:layout_width="wrap_content"
@@ -16,6 +17,7 @@
     </TextView>
 
     <TextView
+        android:id="@+id/author_hunt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

@@ -1,9 +1,6 @@
 package com.example.mobileappdevelopment.Activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,8 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mobileappdevelopment.Adapters.RecycleViewAdapter;
-import com.example.mobileappdevelopment.DataUtils.Coordinates;
-import com.example.mobileappdevelopment.Library.QuestionLibrary;
+import com.example.mobileappdevelopment.DataUtils.DataHunt;
 import com.example.mobileappdevelopment.Model.Hunt;
 import com.example.mobileappdevelopment.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,11 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ChooseHuntActivity extends AppCompatActivity implements RecycleViewAdapter.ItemClickListener {
+public class ChooseHuntActivity extends AppCompatActivity {
 
-    private List<String> namesId;
-
-    private List<Hunt> allHunts;
+    private List<String> titles;
+    private List<String> authors;
+    private List<Hunt> hunts;
 
     private FirebaseFirestore fb;
 
@@ -41,8 +37,9 @@ public class ChooseHuntActivity extends AppCompatActivity implements RecycleView
         setContentView(R.layout.activity_choose_hunt);
 
         // data to populate the RecyclerView with
-        namesId = new ArrayList<>();
-        allHunts = new ArrayList<>();
+        titles = DataHunt.getTitles();
+        authors = DataHunt.getAuthors();
+        hunts = new ArrayList<>();
 
         // connect to database
         fb = FirebaseFirestore.getInstance();
@@ -55,22 +52,6 @@ public class ChooseHuntActivity extends AppCompatActivity implements RecycleView
 
     }
 
-    @Override
-    public void onItemClick(View view, int position) {
-        Toast.makeText(this, "You clicked " + allHunts.get(position).getTitle(), Toast.LENGTH_SHORT).show();
-        Coordinates.coordinates = allHunts.get(position).getCoordinates();
-        QuestionLibrary.choices1 = allHunts.get(position).getAnswer1();
-        QuestionLibrary.choices2 = allHunts.get(position).getAnswer2();
-        QuestionLibrary.choices3 = allHunts.get(position).getAnswer3();
-        QuestionLibrary.correctAnswers = allHunts.get(position).getCorrectAnswer();
-        QuestionLibrary.questions = allHunts.get(position).getQuestions();
-        QuestionLibrary.radius = allHunts.get(position).getRadius();
-
-        Intent i = new Intent(ChooseHuntActivity.this, MapsActivity.class);
-        i.putExtra("hunt_name", allHunts.get(position).getTitle());
-        startActivity(i);
-    }
-
     public void populateList(){
 
         Task<QuerySnapshot> query = fb.collection("Scavenger_Hunts").get();
@@ -81,8 +62,9 @@ public class ChooseHuntActivity extends AppCompatActivity implements RecycleView
                     String huntStringFromDb = query.getString("HuntFile");
                     Gson gson = new Gson();
                     Hunt hunt = gson.fromJson(huntStringFromDb, Hunt.class);
-                    namesId.add(hunt.getTitle());
-                    allHunts.add(hunt);
+//                    titles.add(hunt.getTitle());
+//                    authors.add(hunt.getAuthor());
+                    hunts.add(hunt);
                 }
                 display();
             }
@@ -92,10 +74,9 @@ public class ChooseHuntActivity extends AppCompatActivity implements RecycleView
     public void display(){
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.rvHunts);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        RecycleViewAdapter adapter = new RecycleViewAdapter(this, namesId);
-        adapter.setClickListener(this);
+        RecycleViewAdapter adapter = new RecycleViewAdapter(this, titles, authors);
         recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 1);
