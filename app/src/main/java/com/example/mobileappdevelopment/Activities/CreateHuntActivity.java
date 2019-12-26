@@ -53,7 +53,6 @@ import java.util.Objects;
 
 public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-
     private GoogleMap mMap;
 
     private FusedLocationProviderClient fusedLocationProviderClient;

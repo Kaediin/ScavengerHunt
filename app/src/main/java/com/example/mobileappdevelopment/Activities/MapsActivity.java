@@ -71,9 +71,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
 
-    private int progress;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +92,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         hunt_name = getIntent().getStringExtra("hunt_name");
         sp = getSharedPreferences(hunt_name, Context.MODE_PRIVATE);
-        progress = sp.getInt(hunt_name, 0);
+        int progress = sp.getInt(hunt_name, 0);
 
         if (progress == 0){
             start_time = Calendar.getInstance().getTimeInMillis();

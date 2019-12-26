@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mobileappdevelopment.R;
@@ -25,8 +26,9 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     }
 
     // inflates the row layout from xml when needed
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.list_item, parent, false);
         return new ViewHolder(view);
     }
@@ -62,9 +64,9 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     }
 
     // convenience method for getting data at click position
-    String getItem(int id) {
-        return mData.get(id);
-    }
+//    String getItem(int id) {
+//        return mData.get(id);
+//    }
 
     // allows clicks events to be caught
     public void setClickListener(ItemClickListener itemClickListener) {
