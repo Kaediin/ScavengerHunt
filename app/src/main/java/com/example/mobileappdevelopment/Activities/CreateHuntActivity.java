@@ -28,8 +28,8 @@ import androidx.core.app.ActivityCompat;
 import com.example.mobileappdevelopment.DataUtils.Coordinates;
 import com.example.mobileappdevelopment.DataUtils.DataHunt;
 import com.example.mobileappdevelopment.DataUtils.LocUtils;
-import com.example.mobileappdevelopment.Model.Hunt;
 import com.example.mobileappdevelopment.Library.QuestionLibrary;
+import com.example.mobileappdevelopment.Model.Hunt;
 import com.example.mobileappdevelopment.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -89,7 +89,7 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setContentView(R.layout.activity_choose_location);
+        setContentView(R.layout.activity_create_hunt);
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         // Setting up map fragment
