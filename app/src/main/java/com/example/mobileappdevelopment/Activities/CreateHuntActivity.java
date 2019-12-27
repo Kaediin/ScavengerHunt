@@ -305,6 +305,7 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
                     answer2.setText("");
                     answer3.setText("");
                     radioGroup.clearCheck();
+                    seekBar.setProgress(0);
 
                     mMap.clear();
                     mMap.addMarker(new MarkerOptions()
