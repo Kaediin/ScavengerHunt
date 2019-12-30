@@ -17,7 +17,7 @@ public class Hunt {
 
     public Hunt(){}
 
-    public Hunt(String title, String author, List<String> questions, List<String> answer1, List<String> answer2, List<String> answer3, List<String> correctAnswer, List<Integer> radius, List<LatLng> coordinates){
+    public Hunt(String huntCode, String title, String author, List<String> questions, List<String> answer1, List<String> answer2, List<String> answer3, List<String> correctAnswer, List<Integer> radius, List<LatLng> coordinates){
         this.title = title;
         this.author = author;
         this.questions = questions;
@@ -27,7 +27,7 @@ public class Hunt {
         this.correctAnswer = correctAnswer;
         this.radius = radius;
         this.coordinates = coordinates;
-        this.huntCode = title+author;
+        this.huntCode = huntCode;
     }
 
     public String getTitle() {
@@ -104,5 +104,9 @@ public class Hunt {
 
     public void setRadius(List<Integer> radius) {
         this.radius = radius;
+    }
+
+    public void setHuntCode(String huntCode) {
+        this.huntCode = huntCode;
     }
 }

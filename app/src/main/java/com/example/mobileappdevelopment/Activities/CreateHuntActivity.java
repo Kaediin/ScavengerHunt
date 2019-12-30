@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -61,7 +62,7 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
     private AlertDialog dialog;
 
     private Button selectLocationButton;
-    private Button start;
+    private Button saveHunt;
     private Button cancel;
     private Button add;
 
@@ -91,6 +92,8 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
         super.onCreate(bundle);
         setContentView(R.layout.activity_create_hunt);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
+        Log.v("JarecTest", "onCreate called");
 
         // Setting up map fragment
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -126,7 +129,7 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     public void splash(){
-        start.setVisibility(View.GONE);
+        saveHunt.setVisibility(View.GONE);
         panel.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.VISIBLE);
         selectLocationButton.setVisibility(View.GONE);
@@ -138,6 +141,7 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
                 panel.setVisibility(View.GONE);
                 progressBar.setVisibility(View.GONE);
                 selectLocationButton.setVisibility(View.VISIBLE);
+                Log.v("JarecTest", "Splash deactivated");
             }
         }, 2000);
     }
@@ -145,7 +149,7 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
     @SuppressLint("InflateParams")
     public void assignVars(){
 
-        start = findViewById(R.id.start_hunt);
+        saveHunt = findViewById(R.id.start_hunt);
         panel = findViewById(R.id.loading_panel);
         progressBar = findViewById(R.id.loading_circle);
         selectLocationButton = findViewById(R.id.select_location_button);
@@ -220,6 +224,7 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
             public void onMapClick(LatLng latLng) {
                 if (ActivityCompat.checkSelfPermission(CreateHuntActivity.this,
                         Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    Log.v("JarecTest", "Map tapped on");
                     mMap.clear();
                     mMap.addMarker(new MarkerOptions()
                             .position(myPos)
@@ -319,8 +324,9 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
                                 .title("Tapped location"));
                     }
 
-                    start.setVisibility(View.VISIBLE);
+                    saveHunt.setVisibility(View.VISIBLE);
                     Toast.makeText(CreateHuntActivity.this, "Location added", Toast.LENGTH_SHORT).show();
+                    Log.v("JarecTest", "Question added");
                     dialog.dismiss();
                 } else {
                     Toast.makeText(CreateHuntActivity.this, "Please fill in all the fields", Toast.LENGTH_SHORT).show();
@@ -328,7 +334,7 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
             }
         });
 
-        start.setOnClickListener(new View.OnClickListener() {
+        saveHunt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Hunt hunt = new Hunt();
@@ -341,6 +347,7 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
                 hunt.setQuestions(QuestionLibrary.questions);
                 hunt.setTitle(DataHunt.getTitleHunt());
                 hunt.setAuthor(username);
+                hunt.setHuntCode(DataHunt.getTitleHunt()+username);
 
 //                CheckBox checkBox = findViewById(R.id.checkbox_status);
 
@@ -351,6 +358,7 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
                 huntMap.put("Title", hunt.getTitle());
                 huntMap.put("HuntFile", huntString);
 //                huntMap.put("Status", checkBox.isChecked());
+
                 cr.document(hunt.getTitle()+hunt.getAuthor()).set(huntMap);
 
                 Toast.makeText(CreateHuntActivity.this, "Hunt '"+hunt.getTitle()+"' is saved", Toast.LENGTH_SHORT).show();

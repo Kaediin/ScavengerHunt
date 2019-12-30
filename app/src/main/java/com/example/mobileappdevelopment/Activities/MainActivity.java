@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.mobileappdevelopment.DataUtils.DataHunt;
+import com.example.mobileappdevelopment.Model.Hunt;
 import com.example.mobileappdevelopment.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AlertDialog dialog;
 
+    private String account_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account == null) {
             signIn();
+        } else {
+            account_name = account.getDisplayName();
         }
     }
 
@@ -145,7 +149,6 @@ public class MainActivity extends AppCompatActivity {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Toast.makeText(this, "Sign in rejected. Going further as 'Anonymous'", Toast.LENGTH_SHORT).show();
-//            updateUI(null);
         }
     }
 
@@ -188,10 +191,21 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Title cant be null", Toast.LENGTH_SHORT).show();
         } else {
             String title = title_hunt.getText().toString();
-            DataHunt.setTitleHunt(title);
-            Intent i = new Intent(MainActivity.this, CreateHuntActivity.class);
-            startActivity(i);
+            String huntCode = title+account_name;
+            boolean isUnique = true;
+            for (Hunt hunt : DataHunt.getHunts()) {
+                if (hunt.getHuntCode().equals(huntCode)) {
+                    isUnique = false;
+                }
+            }
+
+            if (isUnique) {
+                DataHunt.setTitleHunt(title);
+                Intent i = new Intent(MainActivity.this, CreateHuntActivity.class);
+                startActivity(i);
+            } else {
+                Toast.makeText(this, "Title is already occupied", Toast.LENGTH_SHORT).show();
+            }
         }
     }
-
 }

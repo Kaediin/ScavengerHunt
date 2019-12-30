@@ -49,6 +49,7 @@ public class DataHunt {
     }
 
     public static List<String> getTitles(){
+        titles.clear();
         Task<QuerySnapshot> query = fb.collection("Scavenger_Hunts").get();
         query.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -65,6 +66,7 @@ public class DataHunt {
     }
 
     public static List<String> getAuthors(){
+        authors.clear();
         Task<QuerySnapshot> query = fb.collection("Scavenger_Hunts").get();
         query.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

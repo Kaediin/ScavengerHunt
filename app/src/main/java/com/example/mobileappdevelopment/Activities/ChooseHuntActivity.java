@@ -25,8 +25,8 @@ import java.util.Objects;
 
 public class ChooseHuntActivity extends AppCompatActivity {
 
-    private List<String> titles;
-    private List<String> authors;
+    private List<String> titles = new ArrayList<>();
+    private List<String> authors = new ArrayList<>();
     private List<Hunt> hunts;
 
     private FirebaseFirestore fb;
