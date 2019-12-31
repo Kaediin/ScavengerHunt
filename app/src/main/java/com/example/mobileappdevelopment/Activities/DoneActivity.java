@@ -3,10 +3,12 @@ package com.example.mobileappdevelopment.Activities;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -29,12 +31,16 @@ public class DoneActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private AlertDialog dialog;
 
+    private Button button;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_done);
         Objects.requireNonNull(getSupportActionBar()).hide();
+
+        button = findViewById(R.id.button_done);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -81,6 +87,13 @@ public class DoneActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(DoneActivity.this, MainActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
     @Override
