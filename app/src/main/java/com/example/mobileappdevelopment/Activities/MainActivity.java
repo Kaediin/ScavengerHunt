@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
     private String account_name;
 
+    private GoogleSignInAccount account;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         title_hunt = popupDialogView.findViewById(R.id.edit_text_hunt_title);
 
         final Button create_new_button = findViewById(R.id.button_create_new);
-        final Button start_selected = findViewById(R.id.button_start_selected);
+        final Button gotoSelected = findViewById(R.id.button_start_selected);
 
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -74,8 +76,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                } else {
+                    if (account == null){
+                        signIn();
+                    } else {
+                        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                    }                } else {
                     if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         dialog.show();
                         save_title_hunt.setOnClickListener(new View.OnClickListener() {
@@ -91,12 +96,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        start_selected.setOnClickListener(new View.OnClickListener() {
+        gotoSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                    if (account == null){
+                        signIn();
+                    } else {
+                        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                    }
                 } else {
                     if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         Intent i = new Intent(MainActivity.this, ChooseHuntActivity.class);
@@ -113,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        account = GoogleSignIn.getLastSignedInAccount(this);
         if (account == null) {
             signIn();
         } else {
@@ -148,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Toast.makeText(this, "Sign in rejected. Going further as 'Anonymous'", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Sign in rejected. You must be signed in to use these services", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -159,8 +168,7 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    Intent i = new Intent(MainActivity.this, CreateHuntActivity.class);
-                    startActivity(i);
+                    dialog.show();
                 } else {
                     buildAlertMessageNoGps();
                 }
