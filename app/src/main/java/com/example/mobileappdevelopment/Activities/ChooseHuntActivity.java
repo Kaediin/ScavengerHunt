@@ -53,6 +53,7 @@ public class ChooseHuntActivity extends AppCompatActivity {
 
     }
 
+
     public void setupQuery(){
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

@@ -41,4 +41,9 @@
     <string name="seconds_text">Seconds:</string>
     <string name="save_hunt_button">Start</string>
     <string name="button_done">Done</string>
+
+<!--    menu-->
+    <string name="sort_title">Title</string>
+    <string name="sort_author">Author</string>
+    <string name="sort_date">Date</string>
 </resources>

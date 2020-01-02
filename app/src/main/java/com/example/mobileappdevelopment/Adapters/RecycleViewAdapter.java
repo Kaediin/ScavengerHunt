@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mobileappdevelopment.Activities.ChooseHuntActivity;
 import com.example.mobileappdevelopment.Activities.MapsActivity;
 import com.example.mobileappdevelopment.DataUtils.Coordinates;
 import com.example.mobileappdevelopment.DataUtils.DataHunt;
@@ -54,7 +53,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
             @Override
             public void onClick(View view) {
 //                Toast.makeText(mContext, titles.get(position), Toast.LENGTH_SHORT).show();
-                Toast.makeText(mContext, "You clicked " + hunts.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Starting Hunt: " + hunts.get(position).getTitle(), Toast.LENGTH_SHORT).show();
                 Coordinates.coordinates = hunts.get(position).getCoordinates();
                 QuestionLibrary.choices1 = hunts.get(position).getAnswer1();
                 QuestionLibrary.choices2 = hunts.get(position).getAnswer2();
