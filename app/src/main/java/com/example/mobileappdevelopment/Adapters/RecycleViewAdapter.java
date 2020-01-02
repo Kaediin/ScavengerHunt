@@ -2,6 +2,7 @@ package com.example.mobileappdevelopment.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,11 +50,14 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         final List<Hunt> hunts = DataHunt.getHunts();
         holder.tvTitle.setText(titles.get(position));
         holder.tvAuthor.setText(authors.get(position));
+        holder.setIsRecyclable(true);
+        if (position % 2 == 0){
+            holder.relativeLayout.setBackgroundColor(Color.LTGRAY);
+        }
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Toast.makeText(mContext, titles.get(position), Toast.LENGTH_SHORT).show();
-                Toast.makeText(mContext, "Starting Hunt: " + hunts.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Playing Hunt: " + hunts.get(position).getTitle(), Toast.LENGTH_SHORT).show();
                 Coordinates.coordinates = hunts.get(position).getCoordinates();
                 QuestionLibrary.choices1 = hunts.get(position).getAnswer1();
                 QuestionLibrary.choices2 = hunts.get(position).getAnswer2();

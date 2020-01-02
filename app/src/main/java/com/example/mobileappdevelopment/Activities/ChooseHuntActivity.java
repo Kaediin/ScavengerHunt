@@ -96,6 +96,7 @@ public class ChooseHuntActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 1);
         recyclerView.addItemDecoration(dividerItemDecoration);
