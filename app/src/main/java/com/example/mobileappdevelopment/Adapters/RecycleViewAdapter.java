@@ -2,7 +2,6 @@ package com.example.mobileappdevelopment.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,13 +46,11 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
+
         final List<Hunt> hunts = DataHunt.getHunts();
         holder.tvTitle.setText(titles.get(position));
         holder.tvAuthor.setText(authors.get(position));
         holder.setIsRecyclable(true);
-        if (position % 2 == 0){
-            holder.relativeLayout.setBackgroundColor(Color.LTGRAY);
-        }
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

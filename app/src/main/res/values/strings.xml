@@ -46,4 +46,7 @@
     <string name="sort_title">Title</string>
     <string name="sort_author">Author</string>
     <string name="sort_date">Date</string>
+
+<!--    misc-->
+    <string name="placeholder">Placeholder text</string>
 </resources>
