@@ -13,8 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mobileappdevelopment.Activities.MapsActivity;
+import com.example.mobileappdevelopment.DataUtils.Cache;
 import com.example.mobileappdevelopment.DataUtils.Coordinates;
-import com.example.mobileappdevelopment.DataUtils.DataHunt;
 import com.example.mobileappdevelopment.Library.QuestionLibrary;
 import com.example.mobileappdevelopment.Model.Hunt;
 import com.example.mobileappdevelopment.R;
@@ -39,15 +39,14 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflates the view
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
+        final List<Hunt> hunts = Cache.allHunts;
 
-        final List<Hunt> hunts = DataHunt.getHunts();
         holder.tvTitle.setText(titles.get(position));
         holder.tvAuthor.setText(authors.get(position));
         holder.setIsRecyclable(true);
@@ -74,13 +73,13 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         return titles.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView tvTitle;
         TextView tvAuthor;
         RelativeLayout relativeLayout;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.title_hunt);
             tvAuthor = itemView.findViewById(R.id.author_hunt);

@@ -32,6 +32,8 @@
             android:background="@color/colorPrimaryDark"
             android:hapticFeedbackEnabled="true"
             android:text="@string/start_select_hunt"
+            android:theme="@style/AppTheme"
+            android:elevation="1dp"
             android:textColor="@color/white" />
 
         <Button

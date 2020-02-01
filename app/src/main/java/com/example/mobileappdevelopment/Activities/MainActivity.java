@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.example.mobileappdevelopment.DataUtils.Cache;
 import com.example.mobileappdevelopment.DataUtils.DataHunt;
 import com.example.mobileappdevelopment.Model.Hunt;
 import com.example.mobileappdevelopment.R;
@@ -28,6 +29,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
@@ -43,9 +45,11 @@ public class MainActivity extends AppCompatActivity {
 
     private AlertDialog dialog;
 
-    private String account_name;
-
     private GoogleSignInAccount account;
+
+    private FirebaseFirestore fb;
+
+    private boolean canShowDialog = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
         builder.setView(popupDialogView);
         dialog = builder.create();
 
+
+        fb = FirebaseFirestore.getInstance();
+
         save_title_hunt = popupDialogView.findViewById(R.id.button_save_hunt_title);
         title_hunt = popupDialogView.findViewById(R.id.edit_text_hunt_title);
 
@@ -71,16 +78,20 @@ public class MainActivity extends AppCompatActivity {
 
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+        Cache.query = fb.collection("Scavenger_Hunts").get();
+
         create_new_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                canShowDialog = true;
                 if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
-                    if (account == null){
+                    if (account == null) {
                         signIn();
                     } else {
                         requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                    }                } else {
+                    }
+                } else {
                     if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         dialog.show();
                         save_title_hunt.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
-                    if (account == null){
+                    if (account == null) {
                         signIn();
                     } else {
                         requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -116,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     @Override
@@ -126,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         if (account == null) {
             signIn();
         } else {
-            account_name = account.getDisplayName();
+            Cache.account = account;
         }
     }
 
@@ -168,8 +180,11 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && canShowDialog) {
                     dialog.show();
+                } else if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !canShowDialog) {
+                    Intent i  = new Intent(MainActivity.this, ChooseHuntActivity.class);
+                    startActivity(i);
                 } else {
                     buildAlertMessageNoGps();
                 }
@@ -200,9 +215,9 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Title cant be null", Toast.LENGTH_SHORT).show();
         } else {
             String title = title_hunt.getText().toString();
-            String huntCode = title+account_name;
+            String huntCode = title + account.getId();
             boolean isUnique = true;
-            for (Hunt hunt : DataHunt.getHunts()) {
+            for (Hunt hunt : Cache.allHunts) {
                 if (hunt.getHuntCode().equals(huntCode)) {
                     isUnique = false;
                 }

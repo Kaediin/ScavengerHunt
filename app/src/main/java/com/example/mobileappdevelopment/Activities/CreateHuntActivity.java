@@ -26,14 +26,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.example.mobileappdevelopment.DataUtils.Cache;
 import com.example.mobileappdevelopment.DataUtils.Coordinates;
 import com.example.mobileappdevelopment.DataUtils.DataHunt;
 import com.example.mobileappdevelopment.DataUtils.LocUtils;
 import com.example.mobileappdevelopment.Library.QuestionLibrary;
 import com.example.mobileappdevelopment.Model.Hunt;
 import com.example.mobileappdevelopment.R;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -72,7 +71,6 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
     private EditText answer3;
 
     private RadioGroup radioGroup;
-    private String username;
 
     private LatLng myPos;
 
@@ -93,17 +91,12 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
         setContentView(R.layout.activity_create_hunt);
         Objects.requireNonNull(getSupportActionBar()).hide();
 
-        Log.v("JarecTest", "onCreate called");
-
         // Setting up map fragment
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
-
-        // Assigns default username. Username will change is user is signed in later on
-        username = "Anonymouse";
 
         // Connect to firebase
         FirebaseFirestore fb = FirebaseFirestore.getInstance();
@@ -141,7 +134,6 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
                 panel.setVisibility(View.GONE);
                 progressBar.setVisibility(View.GONE);
                 selectLocationButton.setVisibility(View.VISIBLE);
-                Log.v("JarecTest", "Splash deactivated");
             }
         }, 2000);
     }
@@ -187,9 +179,10 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
     protected void onStart() {
         super.onStart();
 
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account != null) {
-            username = account.getDisplayName();
+        if (Cache.account == null) {
+            Intent intent = new Intent(CreateHuntActivity.this, MainActivity.class);
+            Toast.makeText(this, "You must be signed into a google account to continue", Toast.LENGTH_SHORT).show();
+            startActivity(intent);
         }
     }
 
@@ -346,8 +339,8 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
                 hunt.setRadius(QuestionLibrary.radius);
                 hunt.setQuestions(QuestionLibrary.questions);
                 hunt.setTitle(DataHunt.getTitleHunt());
-                hunt.setAuthor(username);
-                hunt.setHuntCode(DataHunt.getTitleHunt()+username);
+                hunt.setAuthor(Cache.account.getDisplayName());
+                hunt.setHuntCode(DataHunt.getTitleHunt()+ Cache.account.getId());
 
 //                CheckBox checkBox = findViewById(R.id.checkbox_status);
 

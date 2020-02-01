@@ -1,6 +1,8 @@
 package com.example.mobileappdevelopment.Activities;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -9,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mobileappdevelopment.Adapters.RecycleViewAdapter;
+import com.example.mobileappdevelopment.DataUtils.Cache;
 import com.example.mobileappdevelopment.Model.Hunt;
 import com.example.mobileappdevelopment.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,6 +32,7 @@ public class ChooseHuntActivity extends AppCompatActivity {
     private List<Hunt> hunts = new ArrayList<>();
 
     private SearchView searchView;
+    private ProgressBar progressBar;
 
     private FirebaseFirestore fb;
 
@@ -37,23 +41,31 @@ public class ChooseHuntActivity extends AppCompatActivity {
         super.onCreate(savedInstances);
         setContentView(R.layout.activity_choose_hunt);
 
+
         searchView = findViewById(R.id.search_view);
+        progressBar = findViewById(R.id.progress_choose_hunt);
 
         // connect to database
-        fb = FirebaseFirestore.getInstance();
+//        fb = FirebaseFirestore.getInstance();
+
 
         // fill the list with the right data
         populateList();
 
-        // display the list in a recycle layout
-        display();
+//        display();
 
+        // display the list in a recycle layout
         setupQuery();
 
+
+        RecyclerView recyclerView = findViewById(R.id.rvHunts);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView.Adapter adapter = new RecycleViewAdapter(this, titles, authors);
+        recyclerView.setAdapter(adapter);
     }
 
 
-    public void setupQuery(){
+    public void setupQuery() {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -66,34 +78,44 @@ public class ChooseHuntActivity extends AppCompatActivity {
                 showSearched(s);
                 return false;
             }
+
         });
     }
 
     public void populateList() {
 
-        Task<QuerySnapshot> query = fb.collection("Scavenger_Hunts").get();
-        query.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for (QueryDocumentSnapshot query : Objects.requireNonNull(task.getResult())) {
-                    String huntStringFromDb = query.getString("HuntFile");
-                    Gson gson = new Gson();
-                    Hunt hunt = gson.fromJson(huntStringFromDb, Hunt.class);
-                    titles.add(hunt.getTitle());
-                    authors.add(hunt.getAuthor());
-                    hunts.add(hunt);
+        if (Cache.allHunts == null || Cache.allHunts.isEmpty()) {
+            Cache.query.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    for (QueryDocumentSnapshot query : Objects.requireNonNull(task.getResult())) {
+                        String huntStringFromDb = query.getString("HuntFile");
+                        Gson gson = new Gson();
+                        Hunt hunt = gson.fromJson(huntStringFromDb, Hunt.class);
+                        Cache.allHuntTitles.add(hunt.getTitle());
+                        Cache.allHuntAuthors.add(hunt.getAuthor());
+                        Cache.allHunts.add(hunt);
+                    }
+                    progressBar.setVisibility(View.GONE);
+                    display();
                 }
-                display();
-            }
-        });
+            });
+        } else {
+            progressBar.setVisibility(View.GONE);
+        }
+        hunts = Cache.allHunts;
+        titles = Cache.allHuntTitles;
+        authors = Cache.allHuntAuthors;
+        display();
+
     }
 
     public void display() {
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.rvHunts);
-        RecycleViewAdapter adapter = new RecycleViewAdapter(this, titles, authors);
-        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView.Adapter adapter = new RecycleViewAdapter(this, titles, authors);
+        recyclerView.setAdapter(adapter);
 
 
 //        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
@@ -101,25 +123,26 @@ public class ChooseHuntActivity extends AppCompatActivity {
 //        recyclerView.addItemDecoration(dividerItemDecoration);
     }
 
-    public void showSearched(String s){
+    public void showSearched(String s) {
         List<Hunt> dynamic_list = new ArrayList<>();
 
-        for (Hunt hunt : hunts){
-            if (hunt.getTitle().toUpperCase().contains(s.toUpperCase()) || hunt.getAuthor().toUpperCase().contains(s.toUpperCase())){
+        for (Hunt hunt : Cache.allHunts) {
+            if (hunt.getTitle().toUpperCase().contains(s.toUpperCase()) || hunt.getAuthor().toUpperCase().contains(s.toUpperCase())) {
                 dynamic_list.add(hunt);
             }
         }
 
         titles.clear();
         authors.clear();
-        for (Hunt hunt : dynamic_list){
+        for (Hunt hunt : dynamic_list) {
             titles.add(hunt.getTitle());
             authors.add(hunt.getAuthor());
         }
 
-        RecyclerView recyclerView = findViewById(R.id.rvHunts);
-        RecycleViewAdapter adapter = new RecycleViewAdapter(this, titles, authors);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        display();
+//        RecyclerView recyclerView = findViewById(R.id.rvHunts);
+//        RecycleViewAdapter adapter = new RecycleViewAdapter(this, titles, authors);
+//        recyclerView.setAdapter(adapter);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 }

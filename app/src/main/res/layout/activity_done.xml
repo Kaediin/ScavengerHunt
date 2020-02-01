@@ -21,15 +21,15 @@
         android:backgroundTint="@color/colorPrimaryDark"
         android:hapticFeedbackEnabled="true"
         android:src="@drawable/ic_list_alt"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"/>
 
     <Button
         android:id="@+id/button_done"
-        android:layout_width="100"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10"
+        android:layout_marginBottom="10dp"
         android:backgroundTint="@color/colorAccent"
         android:hapticFeedbackEnabled="true"
         android:text="@string/button_done"
