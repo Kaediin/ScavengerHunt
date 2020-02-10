@@ -17,7 +17,7 @@
     <string name="placeholder_metersFromLoc"> </string>
 
 <!--    dialog_create_question.xml-->
-    <string name="hint_question">Enter your question here</string>
+    <string name="hint_question">Enter your questions here</string>
     <string name="hint_answer1">Answer 1</string>
     <string name="hint_answer2">Answer 2</string>
     <string name="hint_answer3">Answer 3</string>

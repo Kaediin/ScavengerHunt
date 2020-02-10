@@ -14,6 +14,9 @@ public class Cache {
     public static List<String> allHuntTitles = new ArrayList<>();
     public static List<String> allHuntAuthors = new ArrayList<>();
 
+    public static boolean isPrivate = false;
+    public static boolean listUpdated = false;
+
     public static GoogleSignInAccount account = null;
 
     public static Task<QuerySnapshot> query = null;

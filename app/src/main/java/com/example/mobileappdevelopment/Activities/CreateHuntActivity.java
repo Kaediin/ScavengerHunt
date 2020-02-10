@@ -121,7 +121,7 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
 
     }
 
-    public void splash(){
+    public void splash() {
         saveHunt.setVisibility(View.GONE);
         panel.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.VISIBLE);
@@ -139,7 +139,7 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     @SuppressLint("InflateParams")
-    public void assignVars(){
+    public void assignVars() {
 
         saveHunt = findViewById(R.id.start_hunt);
         panel = findViewById(R.id.loading_panel);
@@ -165,7 +165,7 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
         thumbView = LayoutInflater.from(popupDialogView.getContext()).inflate(R.layout.seekbar_layout_thumb, null, false);
     }
 
-    public void clearLists(){
+    public void clearLists() {
         Coordinates.getCoordinatesList().clear();
         QuestionLibrary.radius.clear();
         QuestionLibrary.questions.clear();
@@ -322,7 +322,17 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
                     Log.v("JarecTest", "Question added");
                     dialog.dismiss();
                 } else {
-                    Toast.makeText(CreateHuntActivity.this, "Please fill in all the fields", Toast.LENGTH_SHORT).show();
+                    if (question.getText().toString().isEmpty()) {
+                        Toast.makeText(CreateHuntActivity.this, "1", Toast.LENGTH_SHORT).show();
+                    } else if (answer1.getText().toString().isEmpty()) {
+                        Toast.makeText(CreateHuntActivity.this, "2", Toast.LENGTH_SHORT).show();
+                    } else if (answer2.getText().toString().isEmpty()) {
+                        Toast.makeText(CreateHuntActivity.this, "3", Toast.LENGTH_SHORT).show();
+                    } else if (answer3.getText().toString().isEmpty()) {
+                        Toast.makeText(CreateHuntActivity.this, "4", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(CreateHuntActivity.this, "Please fill in all the fields", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -340,9 +350,9 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
                 hunt.setQuestions(QuestionLibrary.questions);
                 hunt.setTitle(DataHunt.getTitleHunt());
                 hunt.setAuthor(Cache.account.getDisplayName());
-                hunt.setHuntCode(DataHunt.getTitleHunt()+ Cache.account.getId());
-
-//                CheckBox checkBox = findViewById(R.id.checkbox_status);
+                hunt.setHuntCode(DataHunt.getTitleHunt() + Cache.account.getId());
+                hunt.setPrivate(Cache.isPrivate);
+                hunt.setAuthorID(Cache.account.getId());
 
                 Gson gson = new Gson();
                 String huntString = gson.toJson(hunt);
@@ -350,11 +360,12 @@ public class CreateHuntActivity extends AppCompatActivity implements OnMapReadyC
                 huntMap.put("Author", hunt.getAuthor());
                 huntMap.put("Title", hunt.getTitle());
                 huntMap.put("HuntFile", huntString);
-//                huntMap.put("Status", checkBox.isChecked());
+                huntMap.put("Status", Cache.isPrivate);
 
-                cr.document(hunt.getTitle()+hunt.getAuthor()).set(huntMap);
+                cr.document(hunt.getHuntCode()).set(huntMap);
 
-                Toast.makeText(CreateHuntActivity.this, "Hunt '"+hunt.getTitle()+"' is saved", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateHuntActivity.this, "Hunt '" + hunt.getTitle() + "' is saved", Toast.LENGTH_SHORT).show();
+                Cache.listUpdated = true;
                 Intent i = new Intent(CreateHuntActivity.this, MainActivity.class);
                 startActivity(i);
             }

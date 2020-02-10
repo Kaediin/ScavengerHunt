@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private LocationManager manager;
 
     private EditText title_hunt;
+    private CheckBox private_checkbox;
 
     private Button save_title_hunt;
 
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
         save_title_hunt = popupDialogView.findViewById(R.id.button_save_hunt_title);
         title_hunt = popupDialogView.findViewById(R.id.edit_text_hunt_title);
+        private_checkbox = popupDialogView.findViewById(R.id.checkbox_status);
 
         final Button create_new_button = findViewById(R.id.button_create_new);
         final Button gotoSelected = findViewById(R.id.button_start_selected);
@@ -224,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (isUnique) {
+                Cache.isPrivate = private_checkbox.isChecked();
                 DataHunt.setTitleHunt(title);
                 Intent i = new Intent(MainActivity.this, CreateHuntActivity.class);
                 startActivity(i);

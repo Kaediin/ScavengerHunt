@@ -84,7 +84,7 @@ public class ChooseHuntActivity extends AppCompatActivity {
 
     public void populateList() {
 
-        if (Cache.allHunts == null || Cache.allHunts.isEmpty()) {
+        if (Cache.allHunts == null || Cache.allHunts.isEmpty() || Cache.listUpdated) {
             Cache.query.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -92,9 +92,15 @@ public class ChooseHuntActivity extends AppCompatActivity {
                         String huntStringFromDb = query.getString("HuntFile");
                         Gson gson = new Gson();
                         Hunt hunt = gson.fromJson(huntStringFromDb, Hunt.class);
-                        Cache.allHuntTitles.add(hunt.getTitle());
-                        Cache.allHuntAuthors.add(hunt.getAuthor());
-                        Cache.allHunts.add(hunt);
+                        if (!hunt.isPrivate()){
+                            Cache.allHuntTitles.add(hunt.getTitle());
+                            Cache.allHuntAuthors.add(hunt.getAuthor());
+                            Cache.allHunts.add(hunt);
+                        } else if (hunt.isPrivate() && hunt.getAuthorID().equals(Cache.account.getId())) {
+                            Cache.allHuntTitles.add(hunt.getTitle());
+                            Cache.allHuntAuthors.add(hunt.getAuthor());
+                            Cache.allHunts.add(hunt);
+                        }
                     }
                     progressBar.setVisibility(View.GONE);
                     display();

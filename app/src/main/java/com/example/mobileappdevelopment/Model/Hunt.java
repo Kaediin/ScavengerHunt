@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Hunt {
 
-    private String title, author, huntCode;
+    private String title, author, huntCode, authorID;
 
     private List<String> questions, answer1, answer2, answer3, correctAnswer;
 
@@ -15,9 +15,23 @@ public class Hunt {
 
     private List<LatLng> coordinates;
 
+    private boolean isPrivate;
+
     public Hunt(){}
 
-    public Hunt(String huntCode, String title, String author, List<String> questions, List<String> answer1, List<String> answer2, List<String> answer3, List<String> correctAnswer, List<Integer> radius, List<LatLng> coordinates){
+    public Hunt(
+            String huntCode,
+            String title,
+            String author,
+            List<String> questions,
+            List<String> answer1,
+            List<String> answer2,
+            List<String> answer3,
+            List<String> correctAnswer,
+            List<Integer> radius,
+            List<LatLng> coordinates,
+            boolean isPrivate,
+            String authorID){
         this.title = title;
         this.author = author;
         this.questions = questions;
@@ -28,6 +42,8 @@ public class Hunt {
         this.radius = radius;
         this.coordinates = coordinates;
         this.huntCode = huntCode;
+        this.isPrivate = isPrivate;
+        this.authorID = authorID;
     }
 
     public String getTitle() {
@@ -70,6 +86,14 @@ public class Hunt {
         return huntCode;
     }
 
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public String getAuthorID() {
+        return authorID;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -108,5 +132,13 @@ public class Hunt {
 
     public void setHuntCode(String huntCode) {
         this.huntCode = huntCode;
+    }
+
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
+    }
+
+    public void setAuthorID(String authorID) {
+        this.authorID = authorID;
     }
 }
