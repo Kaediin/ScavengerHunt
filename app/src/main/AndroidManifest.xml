@@ -34,7 +34,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:label="Scavenger Hunt"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -44,7 +44,7 @@
         </activity>
 
         <activity
-            android:name=".Activities.ChooseHuntActivity"
+            android:name=".activities.ChooseHuntActivity"
             android:label="Choose Hunt"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -53,7 +53,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Activities.CreateHuntActivity"
+        <activity android:name=".activities.CreateHuntActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -62,7 +62,7 @@
         </activity>
 
         <activity
-            android:name=".Activities.MapsActivity"
+            android:name=".activities.MapsActivity"
             android:label="@string/title_activity_maps"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -72,7 +72,7 @@
         </activity>
 
         <activity
-            android:name=".Activities.DoneActivity"
+            android:name=".activities.DoneActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

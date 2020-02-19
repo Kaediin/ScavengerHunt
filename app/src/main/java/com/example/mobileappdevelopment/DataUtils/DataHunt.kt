@@ -1,31 +1,18 @@
-package com.example.mobileappdevelopment.DataUtils;
+package com.example.mobileappdevelopment.DataUtils
 
-import com.example.mobileappdevelopment.Model.Hunt;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.mobileappdevelopment.Model.Hunt
+import com.google.firebase.firestore.FirebaseFirestore
+import java.util.*
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class DataHunt {
-//    private static List<String> titles = new ArrayList<>();
+object DataHunt {
+    //    private static List<String> titles = new ArrayList<>();
 //    private static List<String> authors = new ArrayList<>();
-    private static List<Hunt> hunts = new ArrayList<>();
+    private val hunts: MutableList<Hunt> = ArrayList()
+    private val fb = FirebaseFirestore.getInstance()
+    //    public static List<Hunt> getHunts(){
+    var titleHunt: String? = null
 
-    private static FirebaseFirestore fb = FirebaseFirestore.getInstance();
-
-    private static String title = null;
-
-    public static void setTitleHunt(String titleInput){
-        title = titleInput;
-    }
-
-    public static String getTitleHunt(){
-        return title;
-    }
-
-
-//    public static List<Hunt> getHunts(){
-//        Task<QuerySnapshot> query = fb.collection("Scavenger_Hunts").get();
+    //        Task<QuerySnapshot> query = fb.collection("Scavenger_Hunts").get();
 //        query.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 //            @Override
 //            public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -39,16 +26,12 @@ public class DataHunt {
 //        });
 //        return hunts;
 //    }
-
 //    public static void display(Context context, RecyclerView recyclerView, List<String> titles, List<String> authors){
 //        RecycleViewAdapter adapter = new RecycleViewAdapter(context, titles, authors);
 //        recyclerView.setAdapter(adapter);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(context));
 //    }
-
-
-
-    /*
+/*
     public static List<String> getTitles(){
         titles.clear();
         Task<QuerySnapshot> query = fb.collection("Scavenger_Hunts").get();
