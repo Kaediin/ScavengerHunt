@@ -1,4 +1,4 @@
-package com.example.mobileappdevelopment.DataUtils
+package com.example.mobileappdevelopment.utils
 
 import android.content.Context
 import android.graphics.Bitmap

@@ -1,10 +1,9 @@
-package com.example.mobileappdevelopment.DataUtils
+package com.example.mobileappdevelopment.utils
 
-import com.example.mobileappdevelopment.Model.Hunt
+import com.example.mobileappdevelopment.model.Hunt
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.QuerySnapshot
-import java.util.*
 import kotlin.collections.ArrayList
 
 object Cache {

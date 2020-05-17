@@ -17,9 +17,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.example.mobileappdevelopment.DataUtils.Coordinates
-import com.example.mobileappdevelopment.DataUtils.LocUtils
-import com.example.mobileappdevelopment.Library.QuestionLibrary
+import com.example.mobileappdevelopment.utils.Coordinates
+import com.example.mobileappdevelopment.utils.LocUtils
+import com.example.mobileappdevelopment.library.QuestionLibrary
 import com.example.mobileappdevelopment.R
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
@@ -121,7 +121,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleApiClient.Co
     }
 
     private fun loadCoordinates(numberAscending: Int) {
-        val coordinates = Coordinates.coordinatesList
+        val coordinates = Coordinates.coordinates
         mMap!!.addMarker(MarkerOptions()
                 .position(coordinates[numberAscending])
                 .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(this@MapsActivity, "marker_green")))
@@ -228,8 +228,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleApiClient.Co
     @SuppressLint("SetTextI18n")
     private fun setTVDistance(location: Location): Double {
         val locCheck = Location(LocationManager.GPS_PROVIDER)
-        locCheck.latitude = Coordinates.coordinatesList[progress_number].latitude
-        locCheck.longitude = Coordinates.coordinatesList[progress_number].longitude
+        locCheck.latitude = Coordinates.coordinates[progress_number].latitude
+        locCheck.longitude = Coordinates.coordinates[progress_number].longitude
         val distanceInKM = location.distanceTo(locCheck).toDouble()
         val distanceTV = findViewById<TextView>(R.id.distanceText)
         val distanceRounded = DecimalFormat("###")

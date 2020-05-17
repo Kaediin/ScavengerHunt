@@ -6,13 +6,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mobileappdevelopment.DataUtils.Coordinates
-import com.example.mobileappdevelopment.DataUtils.LocUtils
+import com.example.mobileappdevelopment.utils.Coordinates
+import com.example.mobileappdevelopment.utils.LocUtils
 import com.example.mobileappdevelopment.R
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -20,7 +19,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.MarkerOptions
-import java.util.*
 
 @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class DoneActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -68,7 +66,7 @@ class DoneActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         var teller = 1
-        for (latLng in Coordinates.coordinatesList) {
+        for (latLng in Coordinates.coordinates) {
             googleMap.addMarker(MarkerOptions()
                     .position(latLng)
                     .icon(BitmapDescriptorFactory.fromBitmap(LocUtils.resizeMapIcons(this@DoneActivity, "marker_green")))

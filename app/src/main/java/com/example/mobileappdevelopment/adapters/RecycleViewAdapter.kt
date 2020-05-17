@@ -1,4 +1,4 @@
-package com.example.mobileappdevelopment.Adapters
+package com.example.mobileappdevelopment.adapters
 
 import android.content.Context
 import android.content.Intent
@@ -9,9 +9,9 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mobileappdevelopment.DataUtils.Cache
-import com.example.mobileappdevelopment.DataUtils.Coordinates
-import com.example.mobileappdevelopment.Library.QuestionLibrary
+import com.example.mobileappdevelopment.utils.Cache
+import com.example.mobileappdevelopment.utils.Coordinates
+import com.example.mobileappdevelopment.library.QuestionLibrary
 import com.example.mobileappdevelopment.R
 import com.example.mobileappdevelopment.activities.MapsActivity
 import java.util.*

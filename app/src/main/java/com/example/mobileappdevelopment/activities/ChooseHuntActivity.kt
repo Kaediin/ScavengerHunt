@@ -8,13 +8,12 @@ import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mobileappdevelopment.Adapters.RecycleViewAdapter
-import com.example.mobileappdevelopment.DataUtils.Cache
-import com.example.mobileappdevelopment.Model.Hunt
+import com.example.mobileappdevelopment.adapters.RecycleViewAdapter
+import com.example.mobileappdevelopment.utils.Cache
+import com.example.mobileappdevelopment.model.Hunt
 import com.example.mobileappdevelopment.R
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
-import org.intellij.lang.annotations.Language
+import kotlinx.android.synthetic.main.activity_choose_hunt.*
 import java.util.*
 
 class ChooseHuntActivity : AppCompatActivity() {
@@ -27,8 +26,8 @@ class ChooseHuntActivity : AppCompatActivity() {
     override fun onCreate(savedInstances: Bundle?) {
         super.onCreate(savedInstances)
         setContentView(R.layout.activity_choose_hunt)
-        searchView = findViewById(R.id.search_view)
-        progressBar = findViewById(R.id.progress_choose_hunt)
+        searchView = search_view
+        progressBar = progress_choose_hunt
 
         populateList()
 
@@ -38,7 +37,7 @@ class ChooseHuntActivity : AppCompatActivity() {
 
     }
 
-    fun setupQuery() {
+    private fun setupQuery() {
         searchView!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
                 showSearched(s)
@@ -52,8 +51,11 @@ class ChooseHuntActivity : AppCompatActivity() {
         })
     }
 
-    fun populateList() {
+    private fun populateList() {
         if (Cache.allHunts.isEmpty() || Cache.listUpdated) {
+            Cache.allHunts.clear()
+            Cache.allHuntAuthors.clear()
+            Cache.allHuntTitles.clear()
             Cache.query?.addOnCompleteListener { task ->
                 for (query in task.result!!) {
                     val huntStringFromDb = query.getString("HuntFile")
@@ -82,7 +84,7 @@ class ChooseHuntActivity : AppCompatActivity() {
     }
 
     // set up the RecyclerView
-    fun display() {
+    private fun display() {
         val recyclerView = findViewById<RecyclerView>(R.id.rvHunts)
         recyclerView.layoutManager = LinearLayoutManager(this)
         val adapter: RecyclerView.Adapter<*> = RecycleViewAdapter(this, titles, authors)
@@ -91,15 +93,15 @@ class ChooseHuntActivity : AppCompatActivity() {
 
     @SuppressLint("DefaultLocale")
     fun showSearched(s: String) {
-        val dynamic_list: MutableList<Hunt> = ArrayList()
+        val dynamicList: MutableList<Hunt> = ArrayList()
         for (hunt in Cache.allHunts) {
             if (hunt.title!!.toUpperCase().contains(s.toUpperCase()) || hunt.author!!.toUpperCase().contains(s.toUpperCase())) {
-                dynamic_list.add(hunt)
+                dynamicList.add(hunt)
             }
         }
         titles.clear()
         authors.clear()
-        for (hunt in dynamic_list) {
+        for (hunt in dynamicList) {
             hunt.title?.let { titles.add(it) }
             hunt.author?.let { authors.add(it) }
         }

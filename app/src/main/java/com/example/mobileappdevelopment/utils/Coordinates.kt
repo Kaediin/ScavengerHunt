@@ -1,4 +1,4 @@
-package com.example.mobileappdevelopment.DataUtils
+package com.example.mobileappdevelopment.utils
 
 import com.google.android.gms.maps.model.LatLng
 import kotlin.collections.ArrayList
@@ -6,9 +6,9 @@ import kotlin.collections.ArrayList
 object Coordinates {
     var coordinates: MutableList<LatLng> = ArrayList()
     fun addCoordinates(latLng: LatLng?) {
-        coordinates.add(latLng!!)
+        this.coordinates.add(latLng!!)
     }
 
-    val coordinatesList: MutableList<LatLng>
-        get() = coordinates
+//    val coordinates: MutableList<LatLng>
+//        get() = this.coordinates
 }

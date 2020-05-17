@@ -17,8 +17,8 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.example.mobileappdevelopment.DataUtils.Cache
-import com.example.mobileappdevelopment.DataUtils.DataHunt
+import com.example.mobileappdevelopment.utils.Cache
+import com.example.mobileappdevelopment.utils.DataHunt
 import com.example.mobileappdevelopment.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
